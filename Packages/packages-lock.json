@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.kylewbanks.scenerefattribute": {
+      "version": "https://github.com/KyleBanks/scene-ref-attribute.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8d3a0ee421588faaf373e0fe4b8f4577a522f029"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.5",
       "depth": 0,
@@ -20,7 +27,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cinemachine": {
-      "version": "2.10.2",
+      "version": "2.10.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {

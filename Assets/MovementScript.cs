@@ -24,10 +24,6 @@ public class MovementScript : MonoBehaviour
     public Joystick joy;
     private bool hasJumped = false;       // 是否已经完成第一次跳跃
     private bool jumpKeyReleased = false; // 是否已经松开跳跃键
-
-    [SerializeField]
-    private Transform target; //相对移动的对象
-
     void Start()
     {
         conn = GetComponent<CharacterController>();
