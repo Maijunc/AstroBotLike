@@ -25,6 +25,9 @@ public class MovementScript : MonoBehaviour
     private bool hasJumped = false;       // 是否已经完成第一次跳跃
     private bool jumpKeyReleased = false; // 是否已经松开跳跃键
 
+    [SerializeField]
+    private Transform target; //相对移动的对象
+
     void Start()
     {
         conn = GetComponent<CharacterController>();
@@ -79,10 +82,28 @@ public class MovementScript : MonoBehaviour
         float horizontalMove = Input.GetAxis("Horizontal");
         float verticalMove = Input.GetAxis("Vertical");
 
+        // 获取摄像机的方向
+        Vector3 cameraForward = Camera.main.transform.forward; // 摄像机前向
+        Vector3 cameraRight = Camera.main.transform.right;     // 摄像机右向
+
+        // 确保摄像机方向仅影响水平移动
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+
+        // 归一化方向
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        // 根据输入计算移动方向（相对摄像机视角的上下左右）
+        Vector3 moveDirection = cameraForward * verticalMove + cameraRight * horizontalMove;
+
+        // 归一化移动方向
+        moveDirection.Normalize();
+
         float joyHorizontalMove = joy.Horizontal * speed;
         float joyVerticalMove = joy.Vertical * speed;
-
-        Vector3 moveDirection = new Vector3(horizontalMove, 0, verticalMove);
+    
+        // Vector3 moveDirection = new Vector3(horizontalMove, 0, verticalMove);
         // 将 moveDirection 向量的长度调整为 1，而不改变其方向
         // Normalize的作用是当玩家按下两个按键，比如"WD"，moveDirection > 1，防止速度过快
         moveDirection.Normalize();
