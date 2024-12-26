@@ -2700,7 +2700,7 @@ GameObject:
   - component: {fileID: 1803827120463121799}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2764,6 +2764,7 @@ MonoBehaviour:
   freeLookCam: {fileID: 0}
   input: {fileID: 11400000, guid: 35aa3e2bb748a443eaca4711fe9e91d3, type: 2}
   groundChecker: {fileID: 1803827120463121799}
+  playerCollider: {fileID: 9211747442943780963}
   moveSpeed: 300
   rotationSpeed: 300
   smoothTime: 0.2
@@ -2772,10 +2773,15 @@ MonoBehaviour:
   jumpCooldown: 0
   jumpMaxHeight: 2
   gravityMultiplier: 3
-  jetpackDuration: 0.5
-  jetpackCooldown: 1
-  jetpackForce: 6
-  jetpackMaxHeight: 2
+  laserDuration: 0.5
+  laserCooldown: 1
+  laserForce: 6
+  laserMaxHeight: 2
+  dashForce: 4
+  dashDuration: 1
+  dashCooldown: 2
+  noFriction: {fileID: 13400000, guid: 27d4224f34c4f47f4839c19d86202275, type: 2}
+  haveFriction: {fileID: 13400000, guid: 6778f7701c588400a9da0790a1662a05, type: 2}
 --- !u!136 &9211747442943780963
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2783,7 +2789,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9156442951417928430}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 6778f7701c588400a9da0790a1662a05, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

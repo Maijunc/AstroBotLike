@@ -269,9 +269,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: f428bc4f3f1fe41da9ab587e0ab5cd55, type: 2}
     - target: {fileID: 6925391291472280980, guid: c058395446b8c464ba8fe6069667943c, type: 3}
+      propertyPath: noFriction
+      value: 
+      objectReference: {fileID: 13400000, guid: 27d4224f34c4f47f4839c19d86202275, type: 2}
+    - target: {fileID: 6925391291472280980, guid: c058395446b8c464ba8fe6069667943c, type: 3}
       propertyPath: freeLookCam
       value: 
       objectReference: {fileID: 408845497}
+    - target: {fileID: 6925391291472280980, guid: c058395446b8c464ba8fe6069667943c, type: 3}
+      propertyPath: haveFriction
+      value: 
+      objectReference: {fileID: 13400000, guid: 6778f7701c588400a9da0790a1662a05, type: 2}
+    - target: {fileID: 6925391291472280980, guid: c058395446b8c464ba8fe6069667943c, type: 3}
+      propertyPath: playerCollider
+      value: 
+      objectReference: {fileID: 1252183597}
     - target: {fileID: 7389158630123075575, guid: c058395446b8c464ba8fe6069667943c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.8605871
@@ -320,6 +332,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 9211747442943780963, guid: c058395446b8c464ba8fe6069667943c, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 6778f7701c588400a9da0790a1662a05, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1519,6 +1535,11 @@ PrefabInstance:
 --- !u!4 &1252183594 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7389158630123075575, guid: c058395446b8c464ba8fe6069667943c, type: 3}
+  m_PrefabInstance: {fileID: 155313790}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &1252183597 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 9211747442943780963, guid: c058395446b8c464ba8fe6069667943c, type: 3}
   m_PrefabInstance: {fileID: 155313790}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1260682568

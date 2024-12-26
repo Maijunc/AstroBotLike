@@ -33,6 +33,11 @@ public class PlayerController : ValidatedMonoBehaviour
     [SerializeField] float laserForce = 6f;
     [SerializeField] float laserMaxHeight = 2f;
 
+    [Header("Dash Settings")]
+    [SerializeField] float dashForce = 10f;
+    [SerializeField] float dashDuration = 1f;
+    [SerializeField] float dashCooldown = 2f;
+
     [Header("Physics Materials")]
     [SerializeField] PhysicsMaterial noFriction;
     [SerializeField] PhysicsMaterial haveFriction;
@@ -44,6 +49,8 @@ public class PlayerController : ValidatedMonoBehaviour
     float currentSpeed;
     float velocity;
     float jumpVelocity;
+    float laserVelocity;
+    float dashVelocity = 1f;
 
     Vector3 movement;
 
@@ -52,6 +59,8 @@ public class PlayerController : ValidatedMonoBehaviour
     CountdownTimer jumpCooldownTimer;
     CountdownTimer laserTimer;
     CountdownTimer laserCooldownTimer;
+    CountdownTimer dashTimer;
+    CountdownTimer dashCooldownTimer;
 
     StateMachine stateMachine;
 
@@ -75,10 +84,16 @@ public class PlayerController : ValidatedMonoBehaviour
         // Setup timer
         jumpTimer = new CountdownTimer(jumpDuration);
         jumpCooldownTimer = new CountdownTimer(jumpCooldown);
+
+        // Setup laser timer
         laserTimer = new CountdownTimer(laserDuration);
         laserCooldownTimer = new CountdownTimer(laserCooldown);
-        timers = new List<Timer> { jumpTimer, jumpCooldownTimer, laserTimer, laserCooldownTimer };
 
+        // Setup dash timer
+        dashTimer = new CountdownTimer(dashDuration);
+        dashCooldownTimer = new CountdownTimer(dashCooldown);
+
+        timers = new List<Timer> { jumpTimer, jumpCooldownTimer, laserTimer, laserCooldownTimer, dashTimer, dashCooldownTimer };
 
         // 当完成跳跃的时候，开始冷却
         jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
@@ -86,6 +101,11 @@ public class PlayerController : ValidatedMonoBehaviour
         laserTimer.OnTimerStop += () => {
             canUseLaserJump = false;
             laserCooldownTimer.Start();
+        };
+        dashTimer.OnTimerStart += () => dashVelocity = dashForce;
+        dashTimer.OnTimerStop += () => {
+            dashVelocity = 1f;
+            dashCooldownTimer.Start();
         };
 
         // State Machine
@@ -95,15 +115,19 @@ public class PlayerController : ValidatedMonoBehaviour
         var LocomotionState = new LocomotionState(this, animator);
         var JumpState = new JumpState(this, animator);
         var LaserJumpState = new LaserJumpState(this, animator);
+        var DashState = new DashState(this, animator);
 
         // 人物的是否运动的判断来自于状态机
         // Define transitions
         // 如果 jumpTimer 还在运行，那么就从 LocomotionState 转换到 JumpState 人物正在跳跃
         At(LocomotionState, JumpState, new FuncPredicate(() => jumpTimer.IsRunning));
         // 人物在地面上，且不在跳跃状态，那么就从 JumpState 转换到 LocomotionState 表示落地了
-        At(JumpState, LocomotionState, new FuncPredicate(() => groundChecker.isGrounded && !jumpTimer.IsRunning));
+        At(JumpState, LocomotionState, new FuncPredicate(() => groundChecker.isGrounded && !jumpTimer.IsRunning && !dashTimer.IsRunning));
         At(JumpState, LaserJumpState, new FuncPredicate(() => laserTimer.IsRunning));
         At(LaserJumpState, JumpState, new FuncPredicate(() => !laserTimer.IsRunning));
+        At(LocomotionState, DashState, new FuncPredicate(() => dashTimer.IsRunning));
+        At(DashState, JumpState, new FuncPredicate(() => !groundChecker.isGrounded && !dashTimer.IsRunning && jumpTimer.IsRunning));
+        At(DashState, LocomotionState, new FuncPredicate(() => groundChecker.isGrounded && !dashTimer.IsRunning && !jumpTimer.IsRunning));
         // Set initial state
         stateMachine.SetState(LocomotionState);
     }
@@ -120,11 +144,13 @@ public class PlayerController : ValidatedMonoBehaviour
     void OnEnable()
     {
         input.Jump += OnJump;
+        input.Dash += OnDash;
     }
 
     void OnDisable()
     {
         input.Jump -= OnJump;
+        input.Dash -= OnDash;
     }
 
     private void OnJump(bool performed)
@@ -140,6 +166,15 @@ public class PlayerController : ValidatedMonoBehaviour
             laserTimer.Start();
         } else if (!performed && laserTimer.IsRunning) { // 如果玩家松开跳跃键并且在喷气中
             laserTimer.Stop(); // 停止喷气
+        }
+    }
+
+    private void OnDash(bool performed)
+    {
+        if(performed && !dashTimer.IsRunning && !dashCooldownTimer.IsRunning) {
+            dashTimer.Start();
+        } else if(!performed && dashTimer.IsRunning) {
+            dashTimer.Stop();
         }
     }
 
@@ -166,18 +201,18 @@ public class PlayerController : ValidatedMonoBehaviour
             if (laserTimer.Progress > launchPoint)
             {
                 // Calculate velocity required to reach the jump height using physics formula v = sqrt(2gh)
-                jumpVelocity = Mathf.Sqrt(2 * laserMaxHeight * Mathf.Abs(Physics.gravity.y));
+                laserVelocity = Mathf.Sqrt(2 * laserMaxHeight * Mathf.Abs(Physics.gravity.y));
             } else {
                 // Gradually apply less velocity as the jump progresses
-                jumpVelocity += (1 - laserTimer.Progress) * laserForce * Time.deltaTime;
+                laserVelocity += (1 - laserTimer.Progress) * laserForce * Time.deltaTime;
             }
         } else { 
             // Gravity takes over 自由落体
-            jumpVelocity += Physics.gravity.y * gravityMultiplier * Time.deltaTime;
+            laserVelocity += Physics.gravity.y * gravityMultiplier * Time.deltaTime;
         }
 
         // Apply velocity
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpVelocity, rb.linearVelocity.z);
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, laserVelocity, rb.linearVelocity.z);
     }
 
     private void HandleTimers()
@@ -252,7 +287,7 @@ public class PlayerController : ValidatedMonoBehaviour
 
     void HandleHorizontalController(Vector3 adjustedDirection)
     {
-        Vector3 velocity = adjustedDirection * moveSpeed * Time.fixedDeltaTime;
+        Vector3 velocity = adjustedDirection * (moveSpeed * dashVelocity * Time.fixedDeltaTime);
         rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
     }
     void HandleRotation(Vector3 adjustedDirection)
