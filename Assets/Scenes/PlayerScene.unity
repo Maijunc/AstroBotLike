@@ -448,6 +448,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7647134206250791342, guid: cc91c8ba8b9a34f4d99e70d721f60b64, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -457,7 +461,13 @@ PrefabInstance:
       addedObject: {fileID: 2098192995}
     - targetCorrespondingSourceObject: {fileID: 7647134206250791342, guid: cc91c8ba8b9a34f4d99e70d721f60b64, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2098192994}
+      addedObject: {fileID: 2098192999}
+    - targetCorrespondingSourceObject: {fileID: 7647134206250791342, guid: cc91c8ba8b9a34f4d99e70d721f60b64, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2098192998}
+    - targetCorrespondingSourceObject: {fileID: 7647134206250791342, guid: cc91c8ba8b9a34f4d99e70d721f60b64, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2098193000}
   m_SourcePrefab: {fileID: 100100000, guid: cc91c8ba8b9a34f4d99e70d721f60b64, type: 3}
 --- !u!1001 &329895241
 PrefabInstance:
@@ -550,6 +560,10 @@ PrefabInstance:
     - target: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_Name
       value: Fixed Joystick
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1271,7 +1285,7 @@ GameObject:
   - component: {fileID: 831848587}
   - component: {fileID: 831848586}
   - component: {fileID: 831848585}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2770,7 +2784,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 11400000, guid: 35aa3e2bb748a443eaca4711fe9e91d3, type: 2}
   freeLookCam: {fileID: 872845975}
-  speedMultiplier: 1
+  speedMultiplier: 3
 --- !u!1 &2021013202
 GameObject:
   m_ObjectHideFlags: 3
@@ -2855,8 +2869,69 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7647134206250791342, guid: cc91c8ba8b9a34f4d99e70d721f60b64, type: 3}
   m_PrefabInstance: {fileID: 252285948}
   m_PrefabAsset: {fileID: 0}
---- !u!143 &2098192994
-CharacterController:
+--- !u!114 &2098192995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098192993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4252438707cb04645b06de13849b0d8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 2098192998}
+  animator: {fileID: 2098192996}
+  freeLookCam: {fileID: 872845975}
+  input: {fileID: 11400000, guid: 35aa3e2bb748a443eaca4711fe9e91d3, type: 2}
+  groundChecker: {fileID: 2098193000}
+  moveSpeed: 300
+  rotationSpeed: 300
+  smoothTime: 0.2
+  jumpForce: 10
+  jumpDuration: 0.5
+  jumpCooldown: 0
+  jumpMaxHeight: 2
+  gravityMultiplier: 3
+  jetpackDuration: 0.5
+  jetpackCooldown: 1
+  jetpackForce: 6
+  jetpackMaxHeight: 2
+--- !u!95 &2098192996 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7413344840680693326, guid: cc91c8ba8b9a34f4d99e70d721f60b64, type: 3}
+  m_PrefabInstance: {fileID: 252285948}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &2098192998
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098192993}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!136 &2098192999
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2870,17 +2945,15 @@ CharacterController:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 1.6
+  serializedVersion: 2
   m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_Height: 1.6
+  m_Direction: 1
   m_Center: {x: 0, y: 0.7, z: 0}
---- !u!114 &2098192995
+--- !u!114 &2098193000
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2889,21 +2962,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2098192993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4252438707cb04645b06de13849b0d8d, type: 3}
+  m_Script: {fileID: 11500000, guid: b46f45f0a34074cfd8b3d4e91e17bf48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 2098192994}
-  animator: {fileID: 2098192996}
-  freeLookCam: {fileID: 872845975}
-  input: {fileID: 11400000, guid: 35aa3e2bb748a443eaca4711fe9e91d3, type: 2}
-  moveSpeed: 6
-  rotationSpeed: 15
-  smoothTime: 0.2
---- !u!95 &2098192996 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 7413344840680693326, guid: cc91c8ba8b9a34f4d99e70d721f60b64, type: 3}
-  m_PrefabInstance: {fileID: 252285948}
-  m_PrefabAsset: {fileID: 0}
+  groundDistance: 0.08
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
