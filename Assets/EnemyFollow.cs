@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 public class EnemyFollow : MonoBehaviour
 {
@@ -37,17 +37,14 @@ public class EnemyFollow : MonoBehaviour
 
         GameObject bulletObj = Instantiate(enemyBullet, spawnPoint.transform.position, spawnPoint.transform.rotation) as GameObject;
 
-        Rigidbody bulletRig = bulletObj.GetComponent<Rigidbody>();
-
-        bulletRig.AddForce(bulletRig.transform.forward * enemySpeed);
         Destroy(bulletObj, 5f);
     }
 
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     if(other.gameObject.tag == "Player")
-    //     {
-    //         // Destroy(bulletObj);
-    //     }
-    // }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            //Destroy(bulletObj);
+        }
+    }
 }
