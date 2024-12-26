@@ -1,0 +1,32 @@
+using UnityEngine;
+using static Timer;
+
+public class ConeDetectionStrategy : IDetectionStrategy
+{   
+    readonly float detectionAngle;
+    readonly float detectionRadius;
+    readonly float innerDetectionRadius;
+    public ConeDetectionStrategy(float detectionAngle, float detectionRadius, float innerDetectionRadius)
+    {
+        this.detectionAngle = detectionAngle;
+        this.detectionRadius = detectionRadius;
+        this.innerDetectionRadius = innerDetectionRadius;
+    }   
+
+    public bool Execute(Transform player, Transform detector, CountdownTimer timer)
+    {
+        if (timer.IsRunning) return false;
+
+        var directionToPlayer = player.position - detector.position;
+        var angleToPlayer = Vector3.Angle(directionToPlayer, detector.forward);
+
+        // 如果玩家 不在视野角度内 或者 不在外圈范围内，并且 不在内圈范围内，则返回 false，表示玩家没有被侦测到。
+        if ((!(angleToPlayer < detectionAngle / 2f) || !(directionToPlayer.magnitude < detectionRadius))
+            && !(directionToPlayer.magnitude < innerDetectionRadius)) return false;
+
+        timer.Start();
+        return true;
+    }
+}
+
+
