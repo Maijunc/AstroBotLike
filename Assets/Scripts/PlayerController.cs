@@ -4,8 +4,6 @@ using Cinemachine;
 using KBCore.Refs;
 using UnityEngine;
 using static Timer;
-
-// ValidatedMonoBehaviour is a custom class that validates the references of the MonoBehaviour
 public class PlayerController : ValidatedMonoBehaviour 
 {
     [Header("References")]
