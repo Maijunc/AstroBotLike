@@ -7,7 +7,7 @@ public abstract class BaseState : IState {
     // 动画状态机参数 用Hash传递，更快，更准
     protected static readonly int LocomotionHash = Animator.StringToHash("Locomotion");
     protected static readonly int JumpHash = Animator.StringToHash("Jump");
-
+    protected static readonly int LaserJumpHash = Animator.StringToHash("LaserJump");
     // 动画过渡时间
     protected const float crossFadeDuration = 0.1f;
 
@@ -17,7 +17,6 @@ public abstract class BaseState : IState {
     }
     public virtual void OnEnter() 
     {
-
     }
     public virtual void Update() 
     {
@@ -29,6 +28,6 @@ public abstract class BaseState : IState {
     }
     public virtual void OnExit() 
     {
-        
+        // Debug.Log("BaseState OnExit");
     }
 }

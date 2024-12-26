@@ -264,6 +264,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 558809679483798029, guid: c058395446b8c464ba8fe6069667943c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: f428bc4f3f1fe41da9ab587e0ab5cd55, type: 2}
     - target: {fileID: 6925391291472280980, guid: c058395446b8c464ba8fe6069667943c, type: 3}
       propertyPath: freeLookCam
       value: 
