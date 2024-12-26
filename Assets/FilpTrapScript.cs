@@ -3,30 +3,34 @@ using DG.Tweening;
 
 public class FilpTrapScript : MonoBehaviour
 {
-    public Transform stickObject; // 棍状物体
-    public Transform panelLeft;   // 左侧板状物体
-    public Transform panelRight;  // 右侧板状物体
+    public float rotateAngle = 90f;  // 旋转的角度
+    public float rotateDuration = 2f;  // 每次旋转的时间
+    public float waitTime = 1f;  // 每次旋转后的等待时间
 
-    public float rotationAngle = 90f;  // 每次旋转的角度（例如 90 度）
-    public float rotationDuration = 2f; // 一次旋转的时间
-    public float delayBeforeStart = 0f; // 延迟开始的时间
-
-    void Start()
+    private void Start()
     {
-        // 启动板状物体围绕棍状物体旋转
-        RotatePanel(panelLeft, stickObject.position);
-        RotatePanel(panelRight, stickObject.position);
+        // 开始旋转循环
+        StartRotating();
     }
 
-    void RotatePanel(Transform panel, Vector3 center)
+    private void StartRotating()
     {
-        // 计算板状物体和棍状物体之间的偏移量（即相对位置）
-        Vector3 offset = panel.position - center;
+        // 创建一个Sequence
+        Sequence rotationSequence = DOTween.Sequence();
 
-        // 设置旋转方向和角度（这里设置绕 Z 轴旋转）
-        panel.DORotate(new Vector3(0, 0, rotationAngle), rotationDuration, RotateMode.LocalAxisAdd)
-            .SetDelay(delayBeforeStart)  // 延迟开始旋转
-            .SetLoops(-1, LoopType.Yoyo)  // 无限循环旋转，并且来回旋转
-            .SetEase(Ease.Linear);  // 使用线性过渡
+        // 顺时针旋转到指定角度
+        rotationSequence.Append(transform.DORotate(new Vector3(rotateAngle,0, 0 ), rotateDuration, RotateMode.LocalAxisAdd));
+
+        // 等待一段时间
+        rotationSequence.AppendInterval(waitTime);
+
+        // 反向旋转回去
+        rotationSequence.Append(transform.DORotate(new Vector3(-rotateAngle, 0, 0), rotateDuration, RotateMode.LocalAxisAdd));
+
+        // 等待一段时间
+        rotationSequence.AppendInterval(waitTime);
+
+        // 循环执行
+        rotationSequence.SetLoops(-1, LoopType.Restart);  // -1 表示无限循环，LoopType.Restart 表示每次循环从头开始
     }
 }
