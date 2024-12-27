@@ -2694,6 +2694,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7389158630123075575}
   - component: {fileID: 558809679483798029}
+  - component: {fileID: 4892947592249759736}
   - component: {fileID: 6925391291472280980}
   - component: {fileID: 9211747442943780963}
   - component: {fileID: 7932838349114404729}
@@ -2749,6 +2750,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4892947592249759736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9156442951417928430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfe390ccfe5b80e4bae887af0428d932, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  x: -100
+  y: 7
+  z: 1
 --- !u!114 &6925391291472280980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2783,8 +2799,8 @@ MonoBehaviour:
   dashForce: 4
   dashDuration: 1
   dashCooldown: 2
-  noFriction: {fileID: 13400000, guid: 27d4224f34c4f47f4839c19d86202275, type: 2}
-  haveFriction: {fileID: 13400000, guid: 6778f7701c588400a9da0790a1662a05, type: 2}
+  noFriction: {fileID: 13400000, guid: 92479121fdf28e34a805aef69b6c1472, type: 2}
+  haveFriction: {fileID: 13400000, guid: a4df1438da5c9114797517a99a24ba2a, type: 2}
   attackCooldown: 0.5
   attackDistance: 2
   attackDamage: 10
@@ -2835,9 +2851,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1803827120463121799
 MonoBehaviour:
   m_ObjectHideFlags: 0

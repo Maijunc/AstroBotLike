@@ -66,7 +66,7 @@ public class DoorSwitchTrigger : MonoBehaviour
             if (doorCoroutine != null)
             {
                 StopCoroutine(doorCoroutine);
-                doorCoroutine = StartCoroutine(CloseDoorSmoothly());
+                //doorCoroutine = StartCoroutine(CloseDoorSmoothly());
             }
         }
     }
