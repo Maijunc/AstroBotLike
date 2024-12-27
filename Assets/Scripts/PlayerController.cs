@@ -41,6 +41,13 @@ public class PlayerController : ValidatedMonoBehaviour
     [Header("Physics Materials")]
     [SerializeField] PhysicsMaterial noFriction;
     [SerializeField] PhysicsMaterial haveFriction;
+
+    [Header("Attack Settings")]
+    // attackCoodown
+    [SerializeField] float attackCooldown = 0.5f;
+    [SerializeField] float attackDistance = 2f;
+    [SerializeField] float attackDamage = 10f;
+
     // 防止浮动
     const float ZeroF = 0f;
     Transform mainCam;
@@ -61,6 +68,7 @@ public class PlayerController : ValidatedMonoBehaviour
     CountdownTimer laserCooldownTimer;
     CountdownTimer dashTimer;
     CountdownTimer dashCooldownTimer;
+    CountdownTimer attackCooldownTimer;
 
     StateMachine stateMachine;
 
@@ -81,19 +89,7 @@ public class PlayerController : ValidatedMonoBehaviour
 
         rb.freezeRotation = true; 
 
-        // Setup timer
-        jumpTimer = new CountdownTimer(jumpDuration);
-        jumpCooldownTimer = new CountdownTimer(jumpCooldown);
-
-        // Setup laser timer
-        laserTimer = new CountdownTimer(laserDuration);
-        laserCooldownTimer = new CountdownTimer(laserCooldown);
-
-        // Setup dash timer
-        dashTimer = new CountdownTimer(dashDuration);
-        dashCooldownTimer = new CountdownTimer(dashCooldown);
-
-        timers = new List<Timer> { jumpTimer, jumpCooldownTimer, laserTimer, laserCooldownTimer, dashTimer, dashCooldownTimer };
+        SetupTimers();
 
         // 当完成跳跃的时候，开始冷却
         jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
@@ -116,6 +112,7 @@ public class PlayerController : ValidatedMonoBehaviour
         var JumpState = new JumpState(this, animator);
         var LaserJumpState = new LaserJumpState(this, animator);
         var DashState = new DashState(this, animator);
+        var AttackState = new AttackState(this, animator);
 
         // 人物的是否运动的判断来自于状态机
         // Define transitions
@@ -128,6 +125,9 @@ public class PlayerController : ValidatedMonoBehaviour
         At(LocomotionState, DashState, new FuncPredicate(() => dashTimer.IsRunning));
         At(DashState, JumpState, new FuncPredicate(() => !groundChecker.isGrounded && !dashTimer.IsRunning && jumpTimer.IsRunning));
         At(DashState, LocomotionState, new FuncPredicate(() => groundChecker.isGrounded && !dashTimer.IsRunning && !jumpTimer.IsRunning));
+
+        At(LocomotionState, AttackState, new FuncPredicate(() => attackCooldownTimer.IsRunning));
+        At(AttackState, LocomotionState, new FuncPredicate(() => !attackCooldownTimer.IsRunning));
         // Set initial state
         stateMachine.SetState(LocomotionState);
     }
@@ -145,12 +145,37 @@ public class PlayerController : ValidatedMonoBehaviour
     {
         input.Jump += OnJump;
         input.Dash += OnDash;
+        input.Attack += OnAttack;
     }
 
     void OnDisable()
     {
         input.Jump -= OnJump;
         input.Dash -= OnDash;
+        input.Attack -= OnAttack;
+    }
+
+    void OnAttack()
+    {
+        if(!attackCooldownTimer.IsRunning)
+        {
+            attackCooldownTimer.Start();
+        }
+    }
+
+    public void Attack()
+    {
+        Vector3 attackPos = transform.position + transform.forward;
+        Collider[] hitEnemies = Physics.OverlapSphere(attackPos, attackDistance);
+
+        foreach (var enemy in hitEnemies)
+        {
+            Debug.Log(enemy.name);
+            if (enemy.CompareTag("Enemy"))
+            {
+                enemy.GetComponent<Health>().TakeDamage((int)attackDamage);
+            }
+        }
     }
 
     private void OnJump(bool performed)
@@ -190,6 +215,25 @@ public class PlayerController : ValidatedMonoBehaviour
     void FixedUpdate()
     {
         stateMachine.FixedUpdate();
+    }
+
+    private void SetupTimers()
+    {
+        // Setup timer
+        jumpTimer = new CountdownTimer(jumpDuration);
+        jumpCooldownTimer = new CountdownTimer(jumpCooldown);
+
+        // Setup laser timer
+        laserTimer = new CountdownTimer(laserDuration);
+        laserCooldownTimer = new CountdownTimer(laserCooldown);
+
+        // Setup dash timer
+        dashTimer = new CountdownTimer(dashDuration);
+        dashCooldownTimer = new CountdownTimer(dashCooldown);
+
+        attackCooldownTimer = new CountdownTimer(attackCooldown);
+
+        timers = new List<Timer> { jumpTimer, jumpCooldownTimer, laserTimer, laserCooldownTimer, dashTimer, dashCooldownTimer, attackCooldownTimer };
     }
 
     public void HandleLaserJump()

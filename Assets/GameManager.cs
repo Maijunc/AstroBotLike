@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; // 单例模式
     public GameObject gameOverUI;       // 游戏结束UI
+    public int score { get; private set; } // 分数
 
     // 游戏是否结束
     private bool isGameOver = false; // 私有字段，外界无法直接访问
@@ -31,5 +32,10 @@ public class GameManager : MonoBehaviour
     {
     }
 
+    public void AddScore(int score)
+    {
+        if (isGameOver) return;
+        this.score += score;
+    }
 
 }

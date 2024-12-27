@@ -7,11 +7,19 @@ public class PlayerDetector : MonoBehaviour
     [SerializeField] float detectionRadius = 10f; //Large circle around enemy
     [SerializeField] float innerDetectionRadius = 5f; //Small circle around enemy
     [SerializeField] float detectionCooldown = 1f; //Cooldown between detections
+    [SerializeField] float attackRange = 2f; // Range at which the enemy can attack the player
 
     public Transform Player { get; private set; }
+    public Health playerHealth { get; private set; }
     CountdownTimer detectionTimer; 
     
     IDetectionStrategy detectionStrategy;
+
+    void Awake()
+    {
+        Player = GameObject.FindGameObjectWithTag("Player").transform; // Make sure to tag the player object with "Player"
+        playerHealth = Player.GetComponent<Health>();
+    }
 
     void Start()
     {
@@ -28,7 +36,29 @@ public class PlayerDetector : MonoBehaviour
         return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
     }
 
+    public bool CanAttackPlayer()
+    {
+        var directionToPlayer = Player.position - transform.position;
+        return directionToPlayer.magnitude <= attackRange;
+    }
+
     public void SetDetectionStrategy(IDetectionStrategy strategy) => detectionStrategy = strategy;
+
+    void OnDrawGizmos() {
+            Gizmos.color = Color.red;
+
+            // Draw a spheres for the radii
+            Gizmos.DrawWireSphere(transform.position, detectionRadius);
+            Gizmos.DrawWireSphere(transform.position, innerDetectionRadius);
+
+            // Calculate our cone directions
+            Vector3 forwardConeDirection = Quaternion.Euler(0, detectionAngle / 2, 0) * transform.forward * detectionRadius;
+            Vector3 backwardConeDirection = Quaternion.Euler(0, -detectionAngle / 2, 0) * transform.forward * detectionRadius;
+
+            // Draw lines to represent the cone
+            Gizmos.DrawLine(transform.position, transform.position + forwardConeDirection);
+            Gizmos.DrawLine(transform.position, transform.position + backwardConeDirection);
+        }
 }
 
 

@@ -13,6 +13,7 @@ public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
     public event UnityAction DisableMouseControlCamera = delegate {};
     public event UnityAction<bool> Jump = delegate {}; 
     public event UnityAction<bool> Dash = delegate {};   
+    public event UnityAction Attack = delegate {};
     PlayerInputActions inputActions;
 
     public Vector3 Direction => inputActions.Player.Move.ReadValue<Vector2>();
@@ -32,7 +33,10 @@ public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        // noop
+        if (context.phase == InputActionPhase.Performed)
+        {
+            Attack.Invoke();
+        }
     }
 
     public void OnJump(InputAction.CallbackContext context)
