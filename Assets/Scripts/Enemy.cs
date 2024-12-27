@@ -57,4 +57,10 @@ public class Enemy : Entity
         Debug.Log("Enemy Attacking");
         playerDetector.playerHealth.TakeDamage(1);
     }
+
+    public void Die()
+    {
+        Debug.Log("Enemy Died");
+        Destroy(gameObject);
+    } 
 }

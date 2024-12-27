@@ -2698,6 +2698,8 @@ GameObject:
   - component: {fileID: 9211747442943780963}
   - component: {fileID: 7932838349114404729}
   - component: {fileID: 1803827120463121799}
+  - component: {fileID: 8606947810662250871}
+  - component: {fileID: 95086806986760891}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2765,6 +2767,7 @@ MonoBehaviour:
   input: {fileID: 11400000, guid: 35aa3e2bb748a443eaca4711fe9e91d3, type: 2}
   groundChecker: {fileID: 1803827120463121799}
   playerCollider: {fileID: 9211747442943780963}
+  spawnPoint: {fileID: 0}
   moveSpeed: 300
   rotationSpeed: 300
   smoothTime: 0.2
@@ -2782,6 +2785,9 @@ MonoBehaviour:
   dashCooldown: 2
   noFriction: {fileID: 13400000, guid: 27d4224f34c4f47f4839c19d86202275, type: 2}
   haveFriction: {fileID: 13400000, guid: 6778f7701c588400a9da0790a1662a05, type: 2}
+  attackCooldown: 0.5
+  attackDistance: 2
+  attackDamage: 10
 --- !u!136 &9211747442943780963
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2848,6 +2854,48 @@ MonoBehaviour:
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &8606947810662250871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9156442951417928430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7a01e82f20544f2c8f89e361bb83842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+  playerHealthChannel: {fileID: 11400000, guid: 58223ad8cda0a42249e5776c3c90a636, type: 2}
+--- !u!114 &95086806986760891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9156442951417928430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45a6d795c53374caa94854c7d927ba7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventChannel: {fileID: 11400000, guid: 58223ad8cda0a42249e5776c3c90a636, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6925391291472280980}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: Die
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &3154030572643384335
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using System;
+using NUnit.Framework;
 using UnityEngine;
 
 public class Health : MonoBehaviour 
@@ -28,5 +29,11 @@ public class Health : MonoBehaviour
             float healthPercentage = (float)currentHealth / maxHealth;
             playerHealthChannel.Invoke(healthPercentage);
         }
+    }
+
+    public void reset()
+    {
+        currentHealth = maxHealth;
+        PublishHealthPercentage();
     }
 }

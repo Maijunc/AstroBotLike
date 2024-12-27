@@ -13,6 +13,7 @@ public class PlayerController : ValidatedMonoBehaviour
     [SerializeField, Anywhere] InputReader input;
     [SerializeField, Anywhere] GroundChecker groundChecker;
     [SerializeField, Anywhere] Collider playerCollider;
+    [SerializeField, Anywhere] Transform spawnPoint;
 
     [Header("Settings")]
     [SerializeField] float moveSpeed = 6f;
@@ -178,6 +179,17 @@ public class PlayerController : ValidatedMonoBehaviour
         }
     }
 
+    public void Die(float playerHealthPercentage)
+    {
+        if(playerHealthPercentage <= 0)
+        {
+            Debug.Log(playerHealthPercentage);
+            this.GetComponent<Health>().reset();
+            rb.linearVelocity = Vector3.zero;
+            this.transform.position = spawnPoint.position;
+        }
+    }
+
     private void OnJump(bool performed)
     {
         // 如果玩家按下跳跃键并且不在跳跃冷却时间内并且在地面上
@@ -210,6 +222,17 @@ public class PlayerController : ValidatedMonoBehaviour
         HandleTimers();
 
         UpdateAnimator();
+
+        DropDetect();
+    }
+
+    private void DropDetect()
+    {
+        if(transform.position.y < -10)
+        {
+            this.GetComponent<Health>().TakeDamage(100);
+            Die(0);
+        }
     }
 
     void FixedUpdate()
