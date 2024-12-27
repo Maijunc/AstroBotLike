@@ -4,7 +4,7 @@ using Cinemachine;
 using KBCore.Refs;
 using UnityEngine;
 using static Timer;
-public class PlayerController : ValidatedMonoBehaviour 
+public class PlayerController : ValidatedMonoBehaviour
 {
     [Header("References")]
     [SerializeField, Self] Rigidbody rb;
@@ -76,7 +76,7 @@ public class PlayerController : ValidatedMonoBehaviour
     // Animator parameters
     static readonly int Speed = Animator.StringToHash("Speed");
 
-    void Awake() 
+    void Awake()
     {
         mainCam = Camera.main.transform;
         freeLookCam.Follow = transform;
@@ -88,7 +88,7 @@ public class PlayerController : ValidatedMonoBehaviour
             transform.position - freeLookCam.transform.position - Vector3.forward
         );
 
-        rb.freezeRotation = true; 
+        rb.freezeRotation = true;
 
         SetupTimers();
 
@@ -158,7 +158,7 @@ public class PlayerController : ValidatedMonoBehaviour
 
     void OnAttack()
     {
-        if(!attackCooldownTimer.IsRunning)
+        if (!attackCooldownTimer.IsRunning)
         {
             attackCooldownTimer.Start();
         }
@@ -175,16 +175,17 @@ public class PlayerController : ValidatedMonoBehaviour
             if (enemy.CompareTag("Enemy"))
             {
                 enemy.GetComponent<Health>().TakeDamage((int)attackDamage);
+                enemy.GetComponent<Enemy>().Die();
             }
         }
     }
 
     public void Die(float playerHealthPercentage)
     {
-        if(playerHealthPercentage <= 0)
+        if (playerHealthPercentage <= 0)
         {
-            Debug.Log(playerHealthPercentage);
-            this.GetComponent<Health>().reset();
+            // Debug.Log(playerHealthPercentage);
+            this.GetComponent<Health>().ResetHP();
             rb.linearVelocity = Vector3.zero;
             this.transform.position = spawnPoint.position;
         }
@@ -193,29 +194,40 @@ public class PlayerController : ValidatedMonoBehaviour
     private void OnJump(bool performed)
     {
         // 如果玩家按下跳跃键并且不在跳跃冷却时间内并且在地面上
-        if (performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.isGrounded) {
+        if (performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.isGrounded)
+        {
             jumpTimer.Start();
             playerCollider.material = noFriction;//材质修改 以防止跳跃中与墙壁有摩擦
-        } else if (!performed && jumpTimer.IsRunning) { // 如果玩家松开跳跃键并且在跳跃中
+        }
+        else if (!performed && jumpTimer.IsRunning)
+        { // 如果玩家松开跳跃键并且在跳跃中
             jumpTimer.Stop(); // 停止跳跃
-        } else if(performed && !jumpTimer.IsRunning && canUseLaserJump && !groundChecker.isGrounded) { // 如果玩家已经不在跳跃过程中且不在地面上但是又按下了跳跃键
+        }
+        else if (performed && !jumpTimer.IsRunning && canUseLaserJump && !groundChecker.isGrounded)
+        { // 如果玩家已经不在跳跃过程中且不在地面上但是又按下了跳跃键
             // 开始喷气
             laserTimer.Start();
-        } else if (!performed && laserTimer.IsRunning) { // 如果玩家松开跳跃键并且在喷气中
+        }
+        else if (!performed && laserTimer.IsRunning)
+        { // 如果玩家松开跳跃键并且在喷气中
             laserTimer.Stop(); // 停止喷气
         }
     }
 
     private void OnDash(bool performed)
     {
-        if(performed && !dashTimer.IsRunning && !dashCooldownTimer.IsRunning) {
+        if (performed && !dashTimer.IsRunning && !dashCooldownTimer.IsRunning)
+        {
             dashTimer.Start();
-        } else if(!performed && dashTimer.IsRunning) {
+        }
+        else if (!performed && dashTimer.IsRunning)
+        {
             dashTimer.Stop();
         }
     }
 
-    void Update() {
+    void Update()
+    {
         movement = new Vector3(input.Direction.x, 0f, input.Direction.y);
         stateMachine.Update();
 
@@ -226,9 +238,10 @@ public class PlayerController : ValidatedMonoBehaviour
         DropDetect();
     }
 
+    // 检测玩家是否掉入虚空
     private void DropDetect()
     {
-        if(transform.position.y < -10)
+        if (transform.position.y < -10)
         {
             this.GetComponent<Health>().TakeDamage(100);
             Die(0);
@@ -262,18 +275,23 @@ public class PlayerController : ValidatedMonoBehaviour
     public void HandleLaserJump()
     {
         // 如果在喷气状态
-        if(laserTimer.IsRunning) {
+        if (laserTimer.IsRunning)
+        {
             // Progress point for initial burst of velocity
             float launchPoint = 0.9f;
             if (laserTimer.Progress > launchPoint)
             {
                 // Calculate velocity required to reach the jump height using physics formula v = sqrt(2gh)
                 laserVelocity = Mathf.Sqrt(2 * laserMaxHeight * Mathf.Abs(Physics.gravity.y));
-            } else {
+            }
+            else
+            {
                 // Gradually apply less velocity as the jump progresses
                 laserVelocity += (1 - laserTimer.Progress) * laserForce * Time.deltaTime;
             }
-        } else { 
+        }
+        else
+        {
             // Gravity takes over 自由落体
             laserVelocity += Physics.gravity.y * gravityMultiplier * Time.deltaTime;
         }
@@ -293,30 +311,37 @@ public class PlayerController : ValidatedMonoBehaviour
     public void HandleJump()
     {
         // If not jumping or lasering and grounded, keep jump velocity at 0 落地了
-        if (!jumpTimer.IsRunning && !laserTimer.IsRunning && groundChecker.isGrounded) {
+        if (!jumpTimer.IsRunning && !laserTimer.IsRunning && groundChecker.isGrounded)
+        {
             jumpVelocity = ZeroF;
             playerCollider.material = haveFriction;
             canUseLaserJump = false;
             return;
         }
 
-        if(!canUseLaserJump && jumpTimer.IsRunning && jumpTimer.Progress > 0.5f) {
+        if (!canUseLaserJump && jumpTimer.IsRunning && jumpTimer.Progress > 0.5f)
+        {
             canUseLaserJump = true;
         }
 
         // If jumping or falling calculate velocity
-        if (jumpTimer.IsRunning) {
+        if (jumpTimer.IsRunning)
+        {
             // Progress point for initial burst of velocity
             float launchPoint = 0.9f;
             if (jumpTimer.Progress > launchPoint)
             {
                 // Calculate velocity required to reach the jump height using physics formula v = sqrt(2gh)
                 jumpVelocity = Mathf.Sqrt(2 * jumpMaxHeight * Mathf.Abs(Physics.gravity.y));
-            } else {
+            }
+            else
+            {
                 // Gradually apply less velocity as the jump progresses
                 jumpVelocity += (1 - jumpTimer.Progress) * jumpForce * Time.deltaTime;
             }
-        } else { 
+        }
+        else
+        {
             // Gravity takes over 自由落体
             jumpVelocity += Physics.gravity.y * gravityMultiplier * Time.deltaTime;
         }
@@ -327,15 +352,15 @@ public class PlayerController : ValidatedMonoBehaviour
 
     private void UpdateAnimator()
     {
-        animator.SetFloat(Speed, currentSpeed); 
+        animator.SetFloat(Speed, currentSpeed);
     }
 
     public void HandleMovement()
     {
         // 调整输入方向相对于摄像机的方向
         var adjustedDirection = Quaternion.AngleAxis(mainCam.eulerAngles.y, Vector3.up) * movement;
-        
-        if (adjustedDirection.magnitude > ZeroF) 
+
+        if (adjustedDirection.magnitude > ZeroF)
         {
             // 旋转角色朝向移动方向
             HandleRotation(adjustedDirection);
@@ -343,7 +368,9 @@ public class PlayerController : ValidatedMonoBehaviour
             HandleHorizontalController(adjustedDirection);
             // 平滑调整速度
             SmoothSpeed(adjustedDirection.magnitude);
-        } else {
+        }
+        else
+        {
             // 当没有输入方向时，减速至零
             SmoothSpeed(ZeroF);
 
@@ -364,7 +391,7 @@ public class PlayerController : ValidatedMonoBehaviour
         transform.LookAt(transform.position + adjustedDirection);
     }
 
-    void SmoothSpeed(float value) 
+    void SmoothSpeed(float value)
     {
         currentSpeed = Mathf.SmoothDamp(currentSpeed, value, ref velocity, smoothTime);
     }

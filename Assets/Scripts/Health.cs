@@ -2,12 +2,12 @@ using System;
 using NUnit.Framework;
 using UnityEngine;
 
-public class Health : MonoBehaviour 
+public class Health : MonoBehaviour
 {
     [SerializeField] int maxHealth = 100;
     [SerializeField] FloatEventChannel playerHealthChannel;
 
-    int currentHealth;
+    public int currentHealth;
 
     public bool IsDead => currentHealth <= 0;
 
@@ -24,14 +24,14 @@ public class Health : MonoBehaviour
 
     private void PublishHealthPercentage()
     {
-        if(playerHealthChannel != null)
+        if (playerHealthChannel != null)
         {
             float healthPercentage = (float)currentHealth / maxHealth;
             playerHealthChannel.Invoke(healthPercentage);
         }
     }
 
-    public void reset()
+    public void ResetHP()
     {
         currentHealth = maxHealth;
         PublishHealthPercentage();

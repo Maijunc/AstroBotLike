@@ -3,7 +3,7 @@ using UnityEngine.AI;
 using KBCore.Refs;
 using System;
 using static Timer;
-public class Enemy : Entity 
+public class Enemy : Entity
 {
     [SerializeField, Self] NavMeshAgent agent;
     [SerializeField, Self] PlayerDetector playerDetector;
@@ -60,7 +60,8 @@ public class Enemy : Entity
 
     public void Die()
     {
-        Debug.Log("Enemy Died");
+        if (this.GetComponent<Health>().currentHealth <= 0)
+            Debug.Log("Enemy Died");
         Destroy(gameObject);
-    } 
+    }
 }

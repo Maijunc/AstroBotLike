@@ -1,18 +1,18 @@
 using UnityEngine;
 using static Timer;
 
-public class PlayerDetector : MonoBehaviour 
+public class PlayerDetector : MonoBehaviour
 {
     [SerializeField] float detectionAngle = 60f; //Cone in front of enemy
     [SerializeField] float detectionRadius = 10f; //Large circle around enemy
     [SerializeField] float innerDetectionRadius = 5f; //Small circle around enemy
     [SerializeField] float detectionCooldown = 1f; //Cooldown between detections
-    [SerializeField] float attackRange = 2f; // Range at which the enemy can attack the player
+    [SerializeField] float attackRange = 1.2f; // Range at which the enemy can attack the player
 
     public Transform Player { get; private set; }
     public Health playerHealth { get; private set; }
-    CountdownTimer detectionTimer; 
-    
+    CountdownTimer detectionTimer;
+
     IDetectionStrategy detectionStrategy;
 
     void Awake()
@@ -44,21 +44,20 @@ public class PlayerDetector : MonoBehaviour
 
     public void SetDetectionStrategy(IDetectionStrategy strategy) => detectionStrategy = strategy;
 
-    void OnDrawGizmos() {
-            Gizmos.color = Color.red;
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
 
-            // Draw a spheres for the radii
-            Gizmos.DrawWireSphere(transform.position, detectionRadius);
-            Gizmos.DrawWireSphere(transform.position, innerDetectionRadius);
+        // Draw a spheres for the radii
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        Gizmos.DrawWireSphere(transform.position, innerDetectionRadius);
 
-            // Calculate our cone directions
-            Vector3 forwardConeDirection = Quaternion.Euler(0, detectionAngle / 2, 0) * transform.forward * detectionRadius;
-            Vector3 backwardConeDirection = Quaternion.Euler(0, -detectionAngle / 2, 0) * transform.forward * detectionRadius;
+        // Calculate our cone directions
+        Vector3 forwardConeDirection = Quaternion.Euler(0, detectionAngle / 2, 0) * transform.forward * detectionRadius;
+        Vector3 backwardConeDirection = Quaternion.Euler(0, -detectionAngle / 2, 0) * transform.forward * detectionRadius;
 
-            // Draw lines to represent the cone
-            Gizmos.DrawLine(transform.position, transform.position + forwardConeDirection);
-            Gizmos.DrawLine(transform.position, transform.position + backwardConeDirection);
-        }
+        // Draw lines to represent the cone
+        Gizmos.DrawLine(transform.position, transform.position + forwardConeDirection);
+        Gizmos.DrawLine(transform.position, transform.position + backwardConeDirection);
+    }
 }
-
-
