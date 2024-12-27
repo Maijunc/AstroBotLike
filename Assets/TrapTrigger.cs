@@ -3,6 +3,9 @@ using UnityEngine;
 public class TrapTrigger : MonoBehaviour
 {
 
+    public float x;
+    public float y;
+    public float z;
     void OnTriggerEnter(Collider other)
     {
 
@@ -10,7 +13,7 @@ public class TrapTrigger : MonoBehaviour
         {
             Debug.Log(other.gameObject.tag);
             //GetComponent<CharacterController>().enabled = false;
-            transform.position = new Vector3(0.078f, 3.3f, -1.49f);
+            transform.position = new Vector3(x, y, z);
             //GetComponent<CharacterController>().enabled = true;
         }
     }

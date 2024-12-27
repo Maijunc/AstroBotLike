@@ -11,9 +11,12 @@ GameObject:
   - component: {fileID: 4072092193231614211}
   - component: {fileID: -506612469425146049}
   - component: {fileID: 7819609917166052300}
+  - component: {fileID: 8845592268584792564}
+  - component: {fileID: 8438526342990532375}
+  - component: {fileID: 1861598935962830593}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -77,6 +80,54 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.6
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &8845592268584792564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006590498731807608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9c3958c3f77b4eeabb7c325342bd31a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: -506612469425146049}
+  playerDetector: {fileID: 8438526342990532375}
+  animator: {fileID: 2017160323824369451}
+  wanderRadius: 5
+  timeBetweenAttacks: 1
+--- !u!114 &8438526342990532375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006590498731807608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f876ec9f0d194ce5af921bb6ce2382e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionAngle: 60
+  detectionRadius: 10
+  innerDetectionRadius: 5
+  detectionCooldown: 1
+  attackRange: 2
+--- !u!114 &1861598935962830593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006590498731807608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7a01e82f20544f2c8f89e361bb83842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+  playerHealthChannel: {fileID: 0}
 --- !u!1001 &1922270397977049973
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -137,5 +188,10 @@ PrefabInstance:
 --- !u!4 &1919420909936236147 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4047972025199878, guid: 928a1377c1cd4515b208fef3a396b8ea, type: 3}
+  m_PrefabInstance: {fileID: 1922270397977049973}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2017160323824369451 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 95457531584545886, guid: 928a1377c1cd4515b208fef3a396b8ea, type: 3}
   m_PrefabInstance: {fileID: 1922270397977049973}
   m_PrefabAsset: {fileID: 0}

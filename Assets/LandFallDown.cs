@@ -15,6 +15,7 @@ public class LandFallDown : MonoBehaviour
     {
         if (!isSinking)
         {
+            Debug.Log(collision.gameObject.tag);
             // 检测到碰撞后触发下沉
             StartSink();
         }
