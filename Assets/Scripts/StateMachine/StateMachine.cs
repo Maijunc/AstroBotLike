@@ -16,6 +16,7 @@ public class StateMachine
     // 例如：暂停、游戏结束等全局事件
     HashSet<ITransition> anyTransitions = new();
 
+    // 不断转换状态
     public void Update()
     {
         var transition = GetTransition();
@@ -33,8 +34,8 @@ public class StateMachine
 
     public void SetState(IState state)
     {
-        current = nodes[state.GetType()];
-        current.State?.OnEnter();
+        this.current = nodes[state.GetType()];
+        this.current.State?.OnEnter();
     }
 
     // 切换到新状态

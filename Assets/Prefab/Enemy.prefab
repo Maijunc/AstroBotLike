@@ -96,7 +96,7 @@ MonoBehaviour:
   playerDetector: {fileID: 8438526342990532375}
   animator: {fileID: 2017160323824369451}
   wanderRadius: 5
-  timeBetweenAttacks: 1
+  timeBetweenAttacks: 0
 --- !u!114 &8438526342990532375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
   detectionRadius: 10
   innerDetectionRadius: 5
   detectionCooldown: 1
-  attackRange: 1.6
+  attackRange: 1.2
 --- !u!114 &1861598935962830593
 MonoBehaviour:
   m_ObjectHideFlags: 0
