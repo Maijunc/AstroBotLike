@@ -70,9 +70,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5d29a84265e34108b55179cfeaaffb9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2848974671964420927}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5d29a84265e34108b55179cfeaaffb9, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7881297919834082835}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5d29a84265e34108b55179cfeaaffb9, type: 3}
       insertIndex: -1
@@ -83,26 +80,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5d29a84265e34108b55179cfeaaffb9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 51638390123826653}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5d29a84265e34108b55179cfeaaffb9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1532163965832197545}
   m_SourcePrefab: {fileID: 100100000, guid: d5d29a84265e34108b55179cfeaaffb9, type: 3}
 --- !u!1 &7229159197071467179 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d5d29a84265e34108b55179cfeaaffb9, type: 3}
   m_PrefabInstance: {fileID: 7535164484826718202}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2848974671964420927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7229159197071467179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90879beb77a3d4763be0a4638b067075, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: 10
-  scoreChannel: {fileID: 11400000, guid: 8c7e471101d3f4154ad537bab3b1c509, type: 2}
 --- !u!114 &7881297919834082835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,3 +233,17 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.3
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1532163965832197545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7229159197071467179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64cd69b0347dd4a94963cb36c99bcb9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 1
+  scoreChannel: {fileID: 11400000, guid: 8c7e471101d3f4154ad537bab3b1c509, type: 2}

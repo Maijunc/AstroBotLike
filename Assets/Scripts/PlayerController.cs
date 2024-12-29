@@ -39,9 +39,6 @@ public class PlayerController : ValidatedMonoBehaviour
     [SerializeField] float dashDuration = 1f;
     [SerializeField] float dashCooldown = 2f;
 
-    [Header("Physics Materials")]
-    [SerializeField] PhysicsMaterial noFriction;
-    [SerializeField] PhysicsMaterial haveFriction;
 
     [Header("Attack Settings")]
     // attackCoodown
@@ -203,7 +200,6 @@ public class PlayerController : ValidatedMonoBehaviour
         if (performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.isGrounded && !attackCooldownTimer.IsRunning)
         {
             jumpTimer.Start();
-            playerCollider.material = noFriction;//材质修改 以防止跳跃中与墙壁有摩擦
         }
         else if (!performed && jumpTimer.IsRunning)
         { // 如果玩家松开跳跃键并且在跳跃中
@@ -320,7 +316,6 @@ public class PlayerController : ValidatedMonoBehaviour
         if (!jumpTimer.IsRunning && !laserTimer.IsRunning && groundChecker.isGrounded)
         {
             jumpVelocity = ZeroF;
-            playerCollider.material = haveFriction;
             canUseLaserJump = false;
             return;
         }
