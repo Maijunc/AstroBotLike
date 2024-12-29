@@ -75,6 +75,7 @@ public class PlayerController : ValidatedMonoBehaviour
 
     // Animator parameters
     static readonly int Speed = Animator.StringToHash("Speed");
+    static readonly int yVelocity = Animator.StringToHash("yVelocity");
 
     void Awake()
     {
@@ -99,7 +100,10 @@ public class PlayerController : ValidatedMonoBehaviour
             canUseLaserJump = false;
             laserCooldownTimer.Start();
         };
-        dashTimer.OnTimerStart += () => dashVelocity = dashForce;
+        dashTimer.OnTimerStart += () => {
+            Debug.Log("dash");
+            dashVelocity = dashForce;
+        };
         dashTimer.OnTimerStop += () => {
             dashVelocity = 1f;
             dashCooldownTimer.Start();
@@ -118,14 +122,16 @@ public class PlayerController : ValidatedMonoBehaviour
         // 人物的是否运动的判断来自于状态机
         // Define transitions
         // 如果 jumpTimer 还在运行，那么就从 LocomotionState 转换到 JumpState 人物正在跳跃
+
         At(LocomotionState, JumpState, new FuncPredicate(() => jumpTimer.IsRunning));
         // 人物在地面上，且不在跳跃状态，那么就从 JumpState 转换到 LocomotionState 表示落地了
         At(JumpState, LocomotionState, new FuncPredicate(() => groundChecker.isGrounded && !jumpTimer.IsRunning && !dashTimer.IsRunning));
         At(JumpState, LaserJumpState, new FuncPredicate(() => laserTimer.IsRunning));
         At(LaserJumpState, JumpState, new FuncPredicate(() => !laserTimer.IsRunning));
-        At(LocomotionState, DashState, new FuncPredicate(() => dashTimer.IsRunning));
-        At(DashState, JumpState, new FuncPredicate(() => !groundChecker.isGrounded && !dashTimer.IsRunning && jumpTimer.IsRunning));
-        At(DashState, LocomotionState, new FuncPredicate(() => groundChecker.isGrounded && !dashTimer.IsRunning && !jumpTimer.IsRunning));
+
+        Any(DashState, new FuncPredicate(() => dashTimer.IsRunning));
+        // At(DashState, JumpState, new FuncPredicate(() => !groundChecker.isGrounded && !dashTimer.IsRunning && jumpTimer.IsRunning));
+        At(DashState, LocomotionState, new FuncPredicate(() => !dashTimer.IsRunning));
 
         At(LocomotionState, AttackState, new FuncPredicate(() => attackCooldownTimer.IsRunning));
         At(AttackState, LocomotionState, new FuncPredicate(() => !attackCooldownTimer.IsRunning));
@@ -194,7 +200,7 @@ public class PlayerController : ValidatedMonoBehaviour
     private void OnJump(bool performed)
     {
         // 如果玩家按下跳跃键并且不在跳跃冷却时间内并且在地面上
-        if (performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.isGrounded)
+        if (performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.isGrounded && !attackCooldownTimer.IsRunning)
         {
             jumpTimer.Start();
             playerCollider.material = noFriction;//材质修改 以防止跳跃中与墙壁有摩擦
@@ -353,6 +359,7 @@ public class PlayerController : ValidatedMonoBehaviour
     private void UpdateAnimator()
     {
         animator.SetFloat(Speed, currentSpeed);
+        animator.SetFloat(yVelocity, rb.linearVelocity.y);
     }
 
     public void HandleMovement()
