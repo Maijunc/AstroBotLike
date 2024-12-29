@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LandGenerator : MonoBehaviour
 {
+    public GameObject Container;//生成后放入的容器
+
     public GameObject landPrefab;  // 用于生成的预制体
     public int landRowCount = 1;      // 阵列的行
     public int landColCount = 1;      // 阵列的列
@@ -44,6 +46,7 @@ public class LandGenerator : MonoBehaviour
                 // 实例化预制体
                 GameObject land = Instantiate(landPrefab, position, Quaternion.identity);
                 generatedLands.Add(land);
+                land.transform.parent = Container.transform;
 
                 //每个陆地的延迟时间可以根据行列顺序来计算
                 float nowDelayTime = (row * landColCount + col) * delayTime;
