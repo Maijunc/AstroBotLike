@@ -1,27 +1,27 @@
-using DG.Tweening;
+ï»¿using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BridgeCreateScript : MonoBehaviour
 {
-    public GameObject Container;//Éú³Éºó·ÅÈëµÄÈİÆ÷
+    public GameObject Container;//ç”Ÿæˆåæ”¾å…¥çš„å®¹å™¨
 
-    public GameObject landPrefab;  // ÓÃÓÚÉú³ÉµÄÔ¤ÖÆÌå
-    public int landRowCount = 1;      // ÕóÁĞµÄĞĞ
-    public int landColCount = 1;      // ÕóÁĞµÄÁĞ
-    public float generateDistanceX = 0f;//Àë´¥·¢µãXÖáµÄ¾àÀë
-    public float generateDistanceY = 0f;//Àë´¥·¢µãYÖáµÄ¾àÀë
-    public float generateDistanceZ = 0f;//Àë´¥·¢µãZÖáµÄ¾àÀë
-    public float distance = 1f;    // Éú³ÉµÄÂ½µØ¼ä¾à
-    public float delayTime = 0.5f;// ¼ÆËãÃ¿¸öÂ½µØµÄÑÓ³ÙÊ±¼ä
-    public float riseDuration = 3f; // Â½µØÉıÆğµÄÊ±¼ä
-    public float riseHeight = 4f;  // Â½µØÉıÆğµÄ¸ß¶È
+    public GameObject landPrefab;  // ç”¨äºç”Ÿæˆçš„é¢„åˆ¶ä½“
+    public int landRowCount = 1;      // é˜µåˆ—çš„è¡Œ
+    public int landColCount = 1;      // é˜µåˆ—çš„åˆ—
+    public float generateDistanceX = 0f;//ç¦»è§¦å‘ç‚¹Xè½´çš„è·ç¦»
+    public float generateDistanceY = 0f;//ç¦»è§¦å‘ç‚¹Yè½´çš„è·ç¦»
+    public float generateDistanceZ = 0f;//ç¦»è§¦å‘ç‚¹Zè½´çš„è·ç¦»
+    public float distance = 1f;    // ç”Ÿæˆçš„é™†åœ°é—´è·
+    public float delayTime = 0.5f;// è®¡ç®—æ¯ä¸ªé™†åœ°çš„å»¶è¿Ÿæ—¶é—´
+    public float riseDuration = 3f; // é™†åœ°å‡èµ·çš„æ—¶é—´
+    public float riseHeight = 4f;  // é™†åœ°å‡èµ·çš„é«˜åº¦
 
-    private bool ifTrigge = false;//ÊÇ·ñ´¥·¢¹ı
+    private bool ifTrigge = false;//æ˜¯å¦è§¦å‘è¿‡
 
     void OnCollisionEnter(Collision collision)
     {
-        // ÅĞ¶ÏÊÇ·ñÊÇÄ¿±êÎïÌå´¥·¢Éú³É
+        // åˆ¤æ–­æ˜¯å¦æ˜¯ç›®æ ‡ç‰©ä½“è§¦å‘ç”Ÿæˆ
         if (collision.gameObject.tag == "Player" && !ifTrigge)
         {
             GenerateLand();
@@ -29,36 +29,36 @@ public class BridgeCreateScript : MonoBehaviour
         }
     }
 
-    // Éú³ÉÂ½µØ
+    // ç”Ÿæˆé™†åœ°
     void GenerateLand()
     {
-        // ´Óµ±Ç°ÎïÌåµÄÎ»ÖÃ¼ÓÉÏ¸÷ÖáµÄÆ«ÒÆ´¦¿ªÊ¼Éú³ÉÂ½µØ
+        // ä»å½“å‰ç‰©ä½“çš„ä½ç½®åŠ ä¸Šå„è½´çš„åç§»å¤„å¼€å§‹ç”Ÿæˆé™†åœ°
         Vector3 startPosition = transform.position + new Vector3(generateDistanceX, generateDistanceY, generateDistanceZ);
-        List<GameObject> generatedLands = new List<GameObject>();  // ÓÃÓÚ±£´æÉú³ÉµÄÂ½µØ
+        List<GameObject> generatedLands = new List<GameObject>();  // ç”¨äºä¿å­˜ç”Ÿæˆçš„é™†åœ°
 
         for (int row = 0; row < landRowCount; row++)
         {
             for (int col = 0; col < landColCount; col++)
             {
-                // ¼ÆËãÂ½µØµÄÉú³ÉÎ»ÖÃ
+                // è®¡ç®—é™†åœ°çš„ç”Ÿæˆä½ç½®
                 Vector3 position = startPosition + new Vector3(col * distance, 0, row * distance);
 
-                // ÊµÀı»¯Ô¤ÖÆÌå
+                // å®ä¾‹åŒ–é¢„åˆ¶ä½“
                 GameObject land = Instantiate(landPrefab, position, Quaternion.identity);
                 generatedLands.Add(land);
                 land.transform.parent = Container.transform;
 
-                //Ã¿¸öÂ½µØµÄÑÓ³ÙÊ±¼ä¿ÉÒÔ¸ù¾İĞĞÁĞË³ĞòÀ´¼ÆËã
+                //æ¯ä¸ªé™†åœ°çš„å»¶è¿Ÿæ—¶é—´å¯ä»¥æ ¹æ®è¡Œåˆ—é¡ºåºæ¥è®¡ç®—
                 float nowDelayTime = (row * landColCount + col) * delayTime;
 
                 DG.Tweening.DOTween.SetTweensCapacity(tweenersCapacity: 200, sequencesCapacity: 200);
-                // Ê¹ÓÃDOTweenÈÃÃ¿¸öÂ½µØ´ÓÏÂÍùÉÏÉıÆğ£¬²¢¿ØÖÆÃ¿¸öÂ½µØ¶¯»­µÄÑÓ³Ù
+                // ä½¿ç”¨DOTweenè®©æ¯ä¸ªé™†åœ°ä»ä¸‹å¾€ä¸Šå‡èµ·ï¼Œå¹¶æ§åˆ¶æ¯ä¸ªé™†åœ°åŠ¨ç”»çš„å»¶è¿Ÿ
                 DOVirtual.DelayedCall(nowDelayTime, () =>
                 {
-                    // ÔÚÑÓ³ÙºóÖ´ĞĞÂ½µØ¶¯»­
-                    land.SetActive(true);  // ÔÚ¶¯»­¿ªÊ¼Ç°¼¤»îÎïÌå
+                    // åœ¨å»¶è¿Ÿåæ‰§è¡Œé™†åœ°åŠ¨ç”»
+                    land.SetActive(true);  // åœ¨åŠ¨ç”»å¼€å§‹å‰æ¿€æ´»ç‰©ä½“
                     land.transform.DOMoveY(land.transform.position.y + riseHeight, riseDuration)
-                        .SetEase(Ease.OutBounce);  // Ê¹ÓÃ»º¶¯Ğ§¹û
+                        .SetEase(Ease.OutBounce);  // ä½¿ç”¨ç¼“åŠ¨æ•ˆæœ
                 });
             }
         }

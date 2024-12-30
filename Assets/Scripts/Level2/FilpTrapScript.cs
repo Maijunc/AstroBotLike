@@ -19,7 +19,7 @@ public class FilpTrapScript : MonoBehaviour
         Sequence rotationSequence = DOTween.Sequence();
 
         // 顺时针旋转到指定角度
-        rotationSequence.Append(transform.DORotate(new Vector3(rotateAngle,0, 0 ), rotateDuration, RotateMode.LocalAxisAdd));
+        rotationSequence.Append(transform.DORotate(new Vector3(rotateAngle, 0, 0), rotateDuration, RotateMode.LocalAxisAdd));
 
         // 等待一段时间
         rotationSequence.AppendInterval(waitTime);
