@@ -9,7 +9,8 @@ public class AttackState : BaseState
     public override void OnEnter()
     {
         // Debug.Log("AttackState OnEnter");
-        animator.CrossFade(AttackHash, crossFadeDuration);
+        animator.CrossFade(AttackLocomotionHash, crossFadeDuration);
+        animator.CrossFadeInFixedTime("Attack", 0.1f, layer: 1); // 播放上半身攻击动画
         player.Attack();
     }
 

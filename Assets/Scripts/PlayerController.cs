@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using KBCore.Refs;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static Timer;
 public class PlayerController : ValidatedMonoBehaviour
 {
@@ -169,30 +170,65 @@ public class PlayerController : ValidatedMonoBehaviour
 
     public void Attack()
     {
+        // 攻击位置和方向
         Vector3 attackPos = transform.position + transform.forward;
+        Vector3 attackDir = transform.forward;
+
         Collider[] hitEnemies = Physics.OverlapSphere(attackPos, attackDistance);
+
+        // 锥形范围的角度限制
+        float coneAngle = 45f; // 45度的锥形范围
 
         foreach (var enemy in hitEnemies)
         {
-            Debug.Log(enemy.name);
-            if (enemy.CompareTag("Enemy"))
+            // 计算目标与攻击方向的夹角
+            Vector3 toEnemy = (enemy.transform.position - transform.position).normalized;
+            float angleToEnemy = Vector3.Angle(attackDir, toEnemy);
+
+            // 如果目标在锥形范围内
+            if (angleToEnemy <= coneAngle && enemy.CompareTag("Enemy"))
             {
-                enemy.GetComponent<Health>().TakeDamage((int)attackDamage);
-                enemy.GetComponent<Enemy>().Die();
+                Debug.Log($"Hit: {enemy.name}");
+                enemy.GetComponent<Enemy>().TakeDamage((int)attackDamage);
             }
         }
     }
 
-    public void Die(float playerHealthPercentage)
+    public void TakeDamage(float damage)
     {
-        if (playerHealthPercentage <= 0)
-        {
-            // Debug.Log(playerHealthPercentage);
-            this.GetComponent<Health>().ResetHP();
-            rb.linearVelocity = Vector3.zero;
-            this.transform.position = spawnPoint.position;
-        }
+        GetComponent<Health>().TakeDamage((int)damage);
+        if(GetComponent<Health>().currentHealth <= 0)
+            Die();
     }
+
+    private void Die()
+    {
+        Debug.Log("PlayerDie");
+        this.GetComponent<Health>().ResetHP();
+        rb.linearVelocity = Vector3.zero;
+        this.transform.position = spawnPoint.position;
+        // 将其重置为初始状态
+        this.transform.rotation = Quaternion.identity;
+
+        // 重置摄像头位置
+        freeLookCam.OnTargetObjectWarped(
+            transform,
+            // 修正相对位置
+            transform.position - freeLookCam.transform.position - Vector3.forward
+        );
+
+        ResetScene();
+
+    }
+
+    void ResetScene()
+{
+    // 获取当前场景的名称
+    string currentSceneName = SceneManager.GetActiveScene().name;
+
+    // 重载当前场景
+    SceneManager.LoadScene(currentSceneName);
+}
 
     private void OnJump(bool performed)
     {
@@ -245,8 +281,7 @@ public class PlayerController : ValidatedMonoBehaviour
     {
         if (transform.position.y < -10)
         {
-            this.GetComponent<Health>().TakeDamage(100);
-            Die(0);
+            TakeDamage(100);
         }
     }
 
@@ -315,7 +350,7 @@ public class PlayerController : ValidatedMonoBehaviour
         // If not jumping or lasering and grounded, keep jump velocity at 0 落地了
         if (!jumpTimer.IsRunning && !laserTimer.IsRunning && groundChecker.isGrounded)
         {
-            jumpVelocity = ZeroF;
+            jumpVelocity = 2f;
             canUseLaserJump = false;
             return;
         }

@@ -54,14 +54,20 @@ public class Enemy : Entity
         if (attackTimer.IsRunning) return;
 
         attackTimer.Start();
-        Debug.Log("Enemy Attacking");
-        playerDetector.playerHealth.TakeDamage(1);
+        playerDetector.Player.GetComponent<PlayerController>().TakeDamage(1);
     }
 
-    public void Die()
+    public void TakeDamage(float damage)
     {
-        if (this.GetComponent<Health>().currentHealth <= 0)
-            Debug.Log("Enemy Died");
+        GetComponent<Health>().TakeDamage((int)damage);
+        if(GetComponent<Health>().currentHealth <= 0)
+            Die();
+    }
+
+    private void Die()
+    {
+        // 播放死亡动画
+            
         Destroy(gameObject);
     }
 }

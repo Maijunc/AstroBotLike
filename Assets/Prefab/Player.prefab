@@ -2799,8 +2799,6 @@ MonoBehaviour:
   dashForce: 4
   dashDuration: 1
   dashCooldown: 2
-  noFriction: {fileID: 13400000, guid: 92479121fdf28e34a805aef69b6c1472, type: 2}
-  haveFriction: {fileID: 13400000, guid: a4df1438da5c9114797517a99a24ba2a, type: 2}
   attackCooldown: 0.5
   attackDistance: 2
   attackDamage: 10
@@ -2811,7 +2809,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9156442951417928430}
-  m_Material: {fileID: 13400000, guid: 6778f7701c588400a9da0790a1662a05, type: 2}
+  m_Material: {fileID: 13400000, guid: 92479121fdf28e34a805aef69b6c1472, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2884,6 +2882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 1
   playerHealthChannel: {fileID: 11400000, guid: 58223ad8cda0a42249e5776c3c90a636, type: 2}
+  currentHealth: 0
 --- !u!114 &95086806986760891
 MonoBehaviour:
   m_ObjectHideFlags: 0
