@@ -9090,7 +9090,7 @@ GameObject:
   - component: {fileID: 40613371}
   - component: {fileID: 40613370}
   - component: {fileID: 40613369}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19349,7 +19349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 198171045}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: EdgeWall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19385,7 +19385,7 @@ GameObject:
   - component: {fileID: 205001791}
   - component: {fileID: 205001790}
   - component: {fileID: 205001789}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19493,7 +19493,7 @@ GameObject:
   - component: {fileID: 212217024}
   - component: {fileID: 212217023}
   - component: {fileID: 212217022}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24123,7 +24123,7 @@ GameObject:
   - component: {fileID: 291765426}
   - component: {fileID: 291765425}
   - component: {fileID: 291765424}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DoorEdge (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24355,7 +24355,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 308183839}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: EdgeWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24500,7 +24500,7 @@ GameObject:
   - component: {fileID: 332970027}
   - component: {fileID: 332970026}
   - component: {fileID: 332970025}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25334,7 +25334,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7389158630123075575, guid: c058395446b8c464ba8fe6069667943c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -28.18
+      value: -52.28
       objectReference: {fileID: 0}
     - target: {fileID: 7389158630123075575, guid: c058395446b8c464ba8fe6069667943c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -28022,7 +28022,7 @@ GameObject:
   - component: {fileID: 790661518}
   - component: {fileID: 790661517}
   - component: {fileID: 790661516}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28374,7 +28374,7 @@ GameObject:
   - component: {fileID: 862662938}
   - component: {fileID: 862662937}
   - component: {fileID: 862662936}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40147,7 +40147,7 @@ GameObject:
   - component: {fileID: 1396571941}
   - component: {fileID: 1396571940}
   - component: {fileID: 1396571939}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40525,7 +40525,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1409389922}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: EdgeWall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40561,7 +40561,7 @@ GameObject:
   - component: {fileID: 1422760497}
   - component: {fileID: 1422760496}
   - component: {fileID: 1422760495}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41108,7 +41108,7 @@ Transform:
   m_GameObject: {fileID: 1436472008}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.25, y: 2.75, z: -18.77}
+  m_LocalPosition: {x: -4.25, y: 2.75, z: -18.38}
   m_LocalScale: {x: 9, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -42708,7 +42708,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1567344124}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42794,7 +42794,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7952801546396704843, guid: ddffb2e2be89e5f48ae192be3700557d, type: 3}
       propertyPath: m_CollideAgainst.m_Bits
-      value: 65
+      value: 129
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -42824,7 +42824,7 @@ GameObject:
   - component: {fileID: 1619693256}
   - component: {fileID: 1619693255}
   - component: {fileID: 1619693254}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LeftDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42933,7 +42933,7 @@ GameObject:
   - component: {fileID: 1666046799}
   - component: {fileID: 1666046798}
   - component: {fileID: 1666046797}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DoorEdge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43314,7 +43314,7 @@ GameObject:
   - component: {fileID: 1704608827}
   - component: {fileID: 1704608826}
   - component: {fileID: 1704608825}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43419,7 +43419,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1714380736}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: EdgeWall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43671,7 +43671,7 @@ GameObject:
   - component: {fileID: 1812802176}
   - component: {fileID: 1812802175}
   - component: {fileID: 1812802174}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RightDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43886,7 +43886,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1845663992}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlatformWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44424,7 +44424,7 @@ GameObject:
   - component: {fileID: 2061073693}
   - component: {fileID: 2061073692}
   - component: {fileID: 2061073691}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
