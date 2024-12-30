@@ -40,17 +40,38 @@ public class PlayerController : ValidatedMonoBehaviour
     [SerializeField] float dashDuration = 1f;
     [SerializeField] float dashCooldown = 2f;
 
+    // HorizontalSlash 横劈
+    [Header("Horizontal Slash Settings")]
+    [SerializeField] float horizontalSlashCooldown = 0.5f;
+    [SerializeField] float horizontalSlashDistance = 2f;
+    [SerializeField] float horizontalSlashDamage = 10f;
 
-    [Header("Attack Settings")]
-    // attackCoodown
-    [SerializeField] float attackCooldown = 0.5f;
-    [SerializeField] float attackDistance = 2f;
-    [SerializeField] float attackDamage = 10f;
+    // DiagonalSlash 斜砍
+    [Header("Diagonal Slash Settings")]
+    [SerializeField] float diagonalSlashCooldown = 0.5f;
+    [SerializeField] float diagonalSlashDistance = 2f;
+    [SerializeField] float diagonalSlashDamage = 10f;
+
+    // 蓄力设置
+    [Header("Charge Settings")]
+    [SerializeField] float maxChargeTime = 2f; // 最大蓄力时间
+    [SerializeField] float chargeCooldown = 0f; // 蓄力冷却时间
+    [SerializeField] float chargeTimeThreshold = 0.5f; // 蓄力时间的阈值。
+
+    // SpinAttack 旋转攻击
+    [Header("Spin Attack Settings")]
+    [SerializeField] float spinAttackRange = 2f;
+    [SerializeField] float spinAttackDamage = 10f;
+    [SerializeField] float spinAttackConeAngle = 360f; //旋转角度
 
     // 防止浮动
     const float ZeroF = 0f;
     Transform mainCam;
     bool canUseLaserJump = false;
+    public bool IsMoving
+{
+    get { return movement.magnitude > 0; }
+}
 
     float currentSpeed;
     float velocity;
@@ -63,17 +84,26 @@ public class PlayerController : ValidatedMonoBehaviour
     List<Timer> timers;
     CountdownTimer jumpTimer;
     CountdownTimer jumpCooldownTimer;
+
     CountdownTimer laserTimer;
     CountdownTimer laserCooldownTimer;
+
     CountdownTimer dashTimer;
     CountdownTimer dashCooldownTimer;
-    CountdownTimer attackCooldownTimer;
+
+    CountdownTimer horizontalSlashCooldownTimer;
+    CountdownTimer diagonalSlashCooldownTimer;
+    CountdownTimer spinAttackCooldownTimer;
+
+    public CountdownTimer chargeTimer;
+    CountdownTimer chargeCooldownTimer;
 
     StateMachine stateMachine;
 
     // Animator parameters
-    static readonly int Speed = Animator.StringToHash("Speed");
+    static readonly int speed = Animator.StringToHash("speed");
     static readonly int yVelocity = Animator.StringToHash("yVelocity");
+    static readonly int spinProgress = Animator.StringToHash("spinProgress");
 
     void Awake()
     {
@@ -91,6 +121,33 @@ public class PlayerController : ValidatedMonoBehaviour
 
         SetupTimers();
 
+        SetupStateMachine();
+    }
+
+    public void HandleCharge()
+    {
+        // 实现蓄力的逻辑
+    }
+
+    private void SetupTimers()
+    {
+        // Setup timers
+        jumpTimer = new CountdownTimer(jumpDuration);
+        jumpCooldownTimer = new CountdownTimer(jumpCooldown);
+        laserTimer = new CountdownTimer(laserDuration);
+        laserCooldownTimer = new CountdownTimer(laserCooldown);
+        dashTimer = new CountdownTimer(dashDuration);
+        dashCooldownTimer = new CountdownTimer(dashCooldown);
+        spinAttackCooldownTimer = new CountdownTimer(maxChargeTime);
+        diagonalSlashCooldownTimer = new CountdownTimer(diagonalSlashCooldown);
+        horizontalSlashCooldownTimer = new CountdownTimer(horizontalSlashCooldown);
+        
+        // Setup charge attack timers
+        chargeTimer = new CountdownTimer(maxChargeTime);
+        chargeCooldownTimer = new CountdownTimer(chargeCooldown);
+
+        timers = new List<Timer> { jumpTimer, jumpCooldownTimer, laserTimer, laserCooldownTimer, dashTimer, dashCooldownTimer, spinAttackCooldownTimer, diagonalSlashCooldownTimer, horizontalSlashCooldownTimer, chargeTimer, chargeCooldownTimer };
+
         // 当完成跳跃的时候，开始冷却
         jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
         // 当喷气时间用完的时候，开始进行喷气背包冷却，将OutOfFuel设置为true，只有在地面上才能充能
@@ -99,7 +156,6 @@ public class PlayerController : ValidatedMonoBehaviour
             laserCooldownTimer.Start();
         };
         dashTimer.OnTimerStart += () => {
-            Debug.Log("dash");
             dashVelocity = dashForce;
         };
         dashTimer.OnTimerStop += () => {
@@ -107,6 +163,33 @@ public class PlayerController : ValidatedMonoBehaviour
             dashCooldownTimer.Start();
         };
 
+        chargeTimer.OnTimerStop += () => {
+            chargeCooldownTimer.Start();
+            StartAttackTimer();
+        };
+    }
+
+    void StartAttackTimer()
+    {
+        // 进入攻击过程
+        // Debug.Log("chargeTimer.Progress = " + chargeTimer.Progress);
+        if (chargeTimer.Progress <= chargeTimeThreshold)
+        {
+            // Debug.Log("StartspinAttack");
+            spinAttackCooldownTimer.Start();
+        } else if(IsMoving)
+        {   
+            // Debug.Log("StartdiagonalSlash");
+            diagonalSlashCooldownTimer.Start();
+        } else 
+        {
+            // Debug.Log("StarthorizontalSlash");
+            horizontalSlashCooldownTimer.Start();
+        }
+    }
+
+    private void SetupStateMachine()
+    {
         // State Machine
         stateMachine = new StateMachine();
 
@@ -115,7 +198,10 @@ public class PlayerController : ValidatedMonoBehaviour
         var JumpState = new JumpState(this, animator);
         var LaserJumpState = new LaserJumpState(this, animator);
         var DashState = new DashState(this, animator);
-        var AttackState = new AttackState(this, animator);
+        var ChargeState = new ChargeState(this, animator);
+        var HorizontalSlashState = new HorizontalSlashState(this, animator);
+        var DiagonalSlashState = new DiagonalSlashState(this, animator);
+        var SpinAttackState = new SpinAttackState(this, animator);
 
         // 人物的是否运动的判断来自于状态机
         // Define transitions
@@ -132,8 +218,16 @@ public class PlayerController : ValidatedMonoBehaviour
         // At(DashState, JumpState, new FuncPredicate(() => !groundChecker.isGrounded && !dashTimer.IsRunning && jumpTimer.IsRunning));
         At(DashState, LocomotionState, new FuncPredicate(() => !dashTimer.IsRunning));
 
-        At(LocomotionState, AttackState, new FuncPredicate(() => attackCooldownTimer.IsRunning));
-        At(AttackState, LocomotionState, new FuncPredicate(() => !attackCooldownTimer.IsRunning));
+        At(LocomotionState, ChargeState, new FuncPredicate(() => chargeTimer.IsRunning));
+        At(ChargeState, SpinAttackState, new FuncPredicate(() => spinAttackCooldownTimer.IsRunning && chargeTimer.Progress <= chargeTimeThreshold));
+        At(ChargeState, DiagonalSlashState, new FuncPredicate(() => diagonalSlashCooldownTimer.IsRunning && chargeTimer.Progress > chargeTimeThreshold && IsMoving));
+        At(ChargeState, HorizontalSlashState, new FuncPredicate(() => horizontalSlashCooldownTimer.IsRunning && chargeTimer.Progress > chargeTimeThreshold && !IsMoving));
+
+        // 攻击持续时间结束
+        At(HorizontalSlashState, LocomotionState, new FuncPredicate(() => !horizontalSlashCooldownTimer.IsRunning));
+        At(DiagonalSlashState, LocomotionState, new FuncPredicate(() => !diagonalSlashCooldownTimer.IsRunning));
+        At(SpinAttackState, LocomotionState, new FuncPredicate(() => !spinAttackCooldownTimer.IsRunning));
+
         // Set initial state
         stateMachine.SetState(LocomotionState);
     }
@@ -161,21 +255,26 @@ public class PlayerController : ValidatedMonoBehaviour
         input.Attack -= OnAttack;
     }
 
-    void OnAttack()
+    void OnAttack(bool performed)
     {
-        if (!attackCooldownTimer.IsRunning)
+        // 按下攻击键 开始蓄力
+        if(performed && !chargeCooldownTimer.IsRunning)
         {
-            attackCooldownTimer.Start();
+            chargeTimer.Start();
+        } else if(!performed) //松开攻击键的时候停止计时
+        {   
+            chargeTimer.Stop();
         }
     }
 
-    public void Attack()
-    {
+    // 横劈
+    public void HandleHorizontalSlash() 
+    { 
         // 攻击位置和方向
         Vector3 attackPos = transform.position + transform.forward;
         Vector3 attackDir = transform.forward;
 
-        Collider[] hitEnemies = Physics.OverlapSphere(attackPos, attackDistance);
+        Collider[] hitEnemies = Physics.OverlapSphere(attackPos, horizontalSlashDistance);
 
         // 锥形范围的角度限制
         float coneAngle = 45f; // 45度的锥形范围
@@ -190,9 +289,76 @@ public class PlayerController : ValidatedMonoBehaviour
             if (angleToEnemy <= coneAngle && enemy.CompareTag("Enemy"))
             {
                 Debug.Log($"Hit: {enemy.name}");
-                enemy.GetComponent<Enemy>().TakeDamage((int)attackDamage);
+                enemy.GetComponent<Enemy>().TakeDamage((int)horizontalSlashDamage);
             }
         }
+    }
+    public void HandleDiagonalSlash() 
+    {
+        // 计算攻击位置和方向
+        Vector3 attackPos = transform.position + transform.forward; // 攻击起始位置
+        Vector3 attackDir = transform.forward; // 默认斜砍的攻击方向是角色的朝前方向
+
+        // 斜砍范围和角度设定
+        float coneAngle = 45f; // 锥形范围的角度，假设是45度的斜砍范围
+
+        // 获取斜砍的方向（这里可以根据角色当前朝向来判断方向是前左斜还是前右斜）
+        Vector3 slashDirection = GetDiagonalSlashDirection();
+
+        // 获取所有被攻击的敌人
+        Collider[] hitEnemies = Physics.OverlapSphere(attackPos, diagonalSlashDistance);
+
+        foreach (var enemy in hitEnemies)
+        {
+            // 计算目标与斜砍方向的夹角
+            Vector3 toEnemy = (enemy.transform.position - transform.position).normalized;
+            float angleToEnemy = Vector3.Angle(slashDirection, toEnemy);
+
+            // 判断目标是否在攻击范围内（即夹角是否小于斜砍的角度）
+            if (angleToEnemy <= coneAngle && enemy.CompareTag("Enemy"))
+            {
+                Debug.Log($"Hit: {enemy.name}");
+                // 对敌人造成伤害
+                enemy.GetComponent<Enemy>().TakeDamage((int)diagonalSlashDamage);
+            }
+        }
+    }
+
+    // 获取斜砍方向（前左斜或前右斜）
+    private Vector3 GetDiagonalSlashDirection()
+    {
+        // 获取角色的右侧和前方方向
+        Vector3 forward = transform.forward;
+        Vector3 right = transform.right;
+
+        // 右上向左下方向是前进方向 + 向左的右侧
+        return (forward - right).normalized; // 斜砍方向为右上向左下
+    }
+    public void HandleSpinAttack() 
+    {
+
+    // 获取攻击位置和攻击方向
+    Vector3 attackPos = transform.position; // 角色位置
+    Vector3 attackDir = transform.forward;  // 攻击方向为角色前方的方向
+
+    // 获取所有被攻击的敌人
+    Collider[] hitEnemies = Physics.OverlapSphere(attackPos, spinAttackRange);
+
+    // 对每个敌人进行检查
+    foreach (var enemy in hitEnemies)
+    {
+        // 判断敌人是否在攻击范围内
+        Vector3 toEnemy = (enemy.transform.position - transform.position).normalized;
+        float angleToEnemy = Vector3.Angle(attackDir, toEnemy); // 计算敌人与攻击方向的夹角
+
+        // 如果敌人在攻击范围内并且是敌人
+        if (angleToEnemy <= spinAttackConeAngle && enemy.CompareTag("Enemy"))
+        {
+            // 输出日志并对敌人造成伤害
+            Debug.Log($"Hit: {enemy.name}");
+            enemy.GetComponent<Enemy>().TakeDamage((int)spinAttackDamage); // 对敌人造成伤害
+        }
+    }
     }
 
     public void TakeDamage(float damage)
@@ -218,23 +384,24 @@ public class PlayerController : ValidatedMonoBehaviour
             transform.position - freeLookCam.transform.position - Vector3.forward
         );
 
+        // 重置场景
         ResetScene();
 
     }
 
     void ResetScene()
-{
-    // 获取当前场景的名称
-    string currentSceneName = SceneManager.GetActiveScene().name;
+    {
+        // 获取当前场景的名称
+        string currentSceneName = SceneManager.GetActiveScene().name;
 
-    // 重载当前场景
-    SceneManager.LoadScene(currentSceneName);
-}
+        // 重载当前场景
+        SceneManager.LoadScene(currentSceneName);
+    }
 
     private void OnJump(bool performed)
     {
         // 如果玩家按下跳跃键并且不在跳跃冷却时间内并且在地面上
-        if (performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.isGrounded && !attackCooldownTimer.IsRunning)
+        if (performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.isGrounded && (!diagonalSlashCooldownTimer.IsRunning || !horizontalSlashCooldownTimer.IsRunning || !spinAttackCooldownTimer.IsRunning))
         {
             jumpTimer.Start();
         }
@@ -289,25 +456,6 @@ public class PlayerController : ValidatedMonoBehaviour
     void FixedUpdate()
     {
         stateMachine.FixedUpdate();
-    }
-
-    private void SetupTimers()
-    {
-        // Setup timer
-        jumpTimer = new CountdownTimer(jumpDuration);
-        jumpCooldownTimer = new CountdownTimer(jumpCooldown);
-
-        // Setup laser timer
-        laserTimer = new CountdownTimer(laserDuration);
-        laserCooldownTimer = new CountdownTimer(laserCooldown);
-
-        // Setup dash timer
-        dashTimer = new CountdownTimer(dashDuration);
-        dashCooldownTimer = new CountdownTimer(dashCooldown);
-
-        attackCooldownTimer = new CountdownTimer(attackCooldown);
-
-        timers = new List<Timer> { jumpTimer, jumpCooldownTimer, laserTimer, laserCooldownTimer, dashTimer, dashCooldownTimer, attackCooldownTimer };
     }
 
     public void HandleLaserJump()
@@ -389,8 +537,9 @@ public class PlayerController : ValidatedMonoBehaviour
 
     private void UpdateAnimator()
     {
-        animator.SetFloat(Speed, currentSpeed);
+        animator.SetFloat(speed, currentSpeed);
         animator.SetFloat(yVelocity, rb.linearVelocity.y);
+        animator.SetFloat(spinProgress, 1 - spinAttackCooldownTimer.Progress);
     }
 
     public void HandleMovement()
@@ -433,5 +582,4 @@ public class PlayerController : ValidatedMonoBehaviour
     {
         currentSpeed = Mathf.SmoothDamp(currentSpeed, value, ref velocity, smoothTime);
     }
-
 }

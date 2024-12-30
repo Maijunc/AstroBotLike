@@ -10,7 +10,11 @@ public abstract class BaseState : IState {
     protected static readonly int JumpHash = Animator.StringToHash("Jump");
     protected static readonly int LaserJumpHash = Animator.StringToHash("LaserJump");
     protected static readonly int DashHash = Animator.StringToHash("Dash");
-    protected static readonly int AttackHash = Animator.StringToHash("Attack");
+    protected static readonly int SpinAttackHash = Animator.StringToHash("SpinAttack");
+    protected static readonly int HorizontalSlashHash = Animator.StringToHash("HorizontalSlash");
+    protected static readonly int DiagonalSlashHash = Animator.StringToHash("DiagonalSlash");
+    protected static readonly int ChargeHash = Animator.StringToHash("Charge");
+
     // 动画过渡时间
     protected const float crossFadeDuration = 0.1f;
 

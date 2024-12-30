@@ -2799,9 +2799,18 @@ MonoBehaviour:
   dashForce: 4
   dashDuration: 1
   dashCooldown: 2
-  attackCooldown: 0.5
-  attackDistance: 2
-  attackDamage: 10
+  horizontalSlashCooldown: 0.5
+  horizontalSlashDistance: 2
+  horizontalSlashDamage: 10
+  diagonalSlashCooldown: 0.5
+  diagonalSlashDistance: 2
+  diagonalSlashDamage: 10
+  thrustAttackCooldown: 0.5
+  thrustAttackDistance: 3
+  thrustAttackDamage: 10
+  maxChargeTime: 2
+  chargeCooldown: 0
+  chargeTimeThreshold: 0.5
 --- !u!136 &9211747442943780963
 CapsuleCollider:
   m_ObjectHideFlags: 0
