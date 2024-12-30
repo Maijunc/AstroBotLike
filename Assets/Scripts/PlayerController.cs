@@ -125,7 +125,8 @@ public class PlayerController : ValidatedMonoBehaviour
         // 人物在地面上，且不在跳跃状态，那么就从 JumpState 转换到 LocomotionState 表示落地了
         At(JumpState, LocomotionState, new FuncPredicate(() => groundChecker.isGrounded && !jumpTimer.IsRunning && !dashTimer.IsRunning));
         At(JumpState, LaserJumpState, new FuncPredicate(() => laserTimer.IsRunning));
-        At(LaserJumpState, JumpState, new FuncPredicate(() => !laserTimer.IsRunning));
+        // 从LaserJumpState 直接转到 LocomotionState
+        At(LaserJumpState, LocomotionState, new FuncPredicate(() => !laserTimer.IsRunning && groundChecker.isGrounded));
 
         Any(DashState, new FuncPredicate(() => dashTimer.IsRunning));
         // At(DashState, JumpState, new FuncPredicate(() => !groundChecker.isGrounded && !dashTimer.IsRunning && jumpTimer.IsRunning));

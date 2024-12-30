@@ -128,8 +128,13 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+<<<<<<< HEAD:Assets/Material/SceneMaterial/Brown2.mat
     - _BaseColor: {r: 0.24528301, g: 0.16059095, b: 0.16059095, a: 1}
     - _Color: {r: 0.24528295, g: 0.16059092, b: 0.16059092, a: 1}
+=======
+    - _BaseColor: {r: 0.13207549, g: 0.10641739, b: 0.10541119, a: 1}
+    - _Color: {r: 0.13207546, g: 0.106417365, b: 0.105411164, a: 1}
+>>>>>>> e70151b512ee1a3b2813e2f96d3cd2d22975f502:Assets/Material/SceneMaterial/New Material.mat
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
