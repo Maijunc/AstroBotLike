@@ -9,6 +9,11 @@ public class Enemy : Entity
     [SerializeField, Self] PlayerDetector playerDetector;
     [SerializeField, Child] Animator animator;
 
+    // 特效
+    // [SerializeField] GameObject spawnVFXPrefab;
+    [SerializeField] GameObject deathVFXPrefab; // 死亡特效预制体
+    [SerializeField] float animationDuration = 2f;
+
     [SerializeField] float wanderRadius = 5f;
     [SerializeField] float timeBetweenAttacks = 1f;
 
@@ -67,7 +72,15 @@ public class Enemy : Entity
     private void Die()
     {
         // 播放死亡动画
+        // 在怪物位置生成死亡特效
+        if (deathVFXPrefab != null)
+        {
+            GameObject vfx = Instantiate(deathVFXPrefab, transform.position, Quaternion.identity);
+            Destroy(vfx, animationDuration); // 2秒后销毁特效
+        }
+
+        // 销毁怪物对象
+        Destroy(gameObject); // 或者播放死亡动画后销毁
             
-        Destroy(gameObject);
     }
 }

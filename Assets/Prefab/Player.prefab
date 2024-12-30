@@ -2805,12 +2805,12 @@ MonoBehaviour:
   diagonalSlashCooldown: 0.5
   diagonalSlashDistance: 2
   diagonalSlashDamage: 10
-  thrustAttackCooldown: 0.5
-  thrustAttackDistance: 3
-  thrustAttackDamage: 10
   maxChargeTime: 2
   chargeCooldown: 0
   chargeTimeThreshold: 0.5
+  spinAttackRange: 2
+  spinAttackDamage: 10
+  spinAttackConeAngle: 360
 --- !u!136 &9211747442943780963
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2979,13 +2979,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3832907126045494399, guid: 3617e4093ca8d5145986d37c89cfd692, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7163034098464034144}
   m_SourcePrefab: {fileID: 100100000, guid: 3617e4093ca8d5145986d37c89cfd692, type: 3}
 --- !u!4 &1567171366435711690 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4502165957148481221, guid: 3617e4093ca8d5145986d37c89cfd692, type: 3}
   m_PrefabInstance: {fileID: 3154030572643384335}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2230520558945054832 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3832907126045494399, guid: 3617e4093ca8d5145986d37c89cfd692, type: 3}
+  m_PrefabInstance: {fileID: 3154030572643384335}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7163034098464034144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230520558945054832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47ab449c5e2e2433e96bb0be1afec88a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chargeVFX: {fileID: 1590415177872986601, guid: acdb90624a404aa438447006f1026065, type: 3}
 --- !u!1001 &5025532193534768503
 PrefabInstance:
   m_ObjectHideFlags: 0

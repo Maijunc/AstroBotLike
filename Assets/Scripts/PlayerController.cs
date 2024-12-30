@@ -258,7 +258,7 @@ public class PlayerController : ValidatedMonoBehaviour
     void OnAttack(bool performed)
     {
         // 按下攻击键 开始蓄力
-        if(performed && !chargeCooldownTimer.IsRunning)
+        if(performed && !chargeCooldownTimer.IsRunning && !spinAttackCooldownTimer.IsRunning)
         {
             chargeTimer.Start();
         } else if(!performed) //松开攻击键的时候停止计时
