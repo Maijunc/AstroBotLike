@@ -350,7 +350,7 @@ public class PlayerController : ValidatedMonoBehaviour
         // If not jumping or lasering and grounded, keep jump velocity at 0 落地了
         if (!jumpTimer.IsRunning && !laserTimer.IsRunning && groundChecker.isGrounded)
         {
-            jumpVelocity = 2f;
+            jumpVelocity = 0;
             canUseLaserJump = false;
             return;
         }
