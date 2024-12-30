@@ -6,9 +6,17 @@ public class GroundChecker : MonoBehaviour
     [SerializeField] LayerMask groundLayers;
 
     public bool isGrounded { get; private set; } 
+    private bool wasGrounded = false; // 缓冲状态
 
     void Update()
     {
-        isGrounded = Physics.SphereCast(transform.position, groundDistance, Vector3.down, out _, groundDistance, groundLayers);
+        // 地面检测
+        bool currentlyGrounded = Physics.SphereCast(transform.position, groundDistance, Vector3.down, out _, groundDistance, groundLayers);
+        
+        // 平滑地面状态
+        isGrounded = currentlyGrounded || wasGrounded;
+        wasGrounded = currentlyGrounded;
+
     }
+
 }
