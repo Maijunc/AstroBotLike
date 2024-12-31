@@ -43,6 +43,8 @@ public class EnemyWanderState : EnemyBaseState
     // 当代理没有路径时，或者代理的速度为0时，代理已经到达目标
     bool HasReachDestination()
     {
+        if(!agent.isActiveAndEnabled)
+            return false;
         return !agent.pathPending
                 && agent.remainingDistance <= agent.stoppingDistance
                 && (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using KBCore.Refs;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using static Timer;
 public class PlayerController : ValidatedMonoBehaviour
@@ -67,6 +68,9 @@ public class PlayerController : ValidatedMonoBehaviour
 
     [Header("Death Settings")]
     [SerializeField] float deathTime = 2f; //死亡重置时间
+
+
+    [SerializeField] float KnockForce = 40f; //怪物死亡的冲击力
 
     // 防止浮动
     const float ZeroF = 0f;
@@ -324,7 +328,7 @@ public class PlayerController : ValidatedMonoBehaviour
             {
                 Debug.Log($"Hit: {enemy.name}");
                 enemy.GetComponent<Enemy>().TakeDamage((int)horizontalSlashDamage);
-                KnockAway(enemy, 10f);
+                enemy.GetComponent<Enemy>().KnockAway(KnockForce); // 击飞敌人
             }
         }
     }
@@ -355,7 +359,7 @@ public class PlayerController : ValidatedMonoBehaviour
                 Debug.Log($"Hit: {enemy.name}");
                 // 对敌人造成伤害
                 enemy.GetComponent<Enemy>().TakeDamage((int)diagonalSlashDamage);
-                KnockAway(enemy, 10f);
+                enemy.GetComponent<Enemy>().KnockAway(5f); // 击飞敌人
             }
         }
     }
@@ -392,24 +396,8 @@ public class PlayerController : ValidatedMonoBehaviour
                 // 输出日志并对敌人造成伤害
                 Debug.Log($"Hit: {enemy.name}");
                 enemy.GetComponent<Enemy>().TakeDamage((int)spinAttackDamage); // 对敌人造成伤害
-                KnockAway(enemy, 10f);
+                enemy.GetComponent<Enemy>().KnockAway(5f); // 击飞敌人
             }
-        }
-    }
-
-    private void KnockAway(Collider enemy, float attackForce)
-    {
-        // 假设怪物有Rigidbody组件
-        Rigidbody enemyRb = enemy.GetComponent<Rigidbody>();
-        if (enemyRb != null)
-        {
-            // 计算击飞方向
-            Vector3 direction = enemy.transform.position - transform.position;
-            direction.y = 10f;  // 仅沿水平方向打飞
-            direction.Normalize();
-
-            // 向怪物应用力
-            enemyRb.AddForce(direction * attackForce, ForceMode.Impulse);
         }
     }
 

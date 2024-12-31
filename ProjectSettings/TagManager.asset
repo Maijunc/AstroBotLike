@@ -9,6 +9,8 @@ TagManager:
   - ground
   - Enemy
   - PushBox
+  - FxTemporaire
+  - Dead
   layers:
   - Default
   - TransparentFX

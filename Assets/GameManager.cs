@@ -57,6 +57,9 @@ public class GameManager : ValidatedMonoBehaviour
 
     private void OnMenu()
     {
+        if(pauseMenuUI == null)
+            return;
+
         if (gameIsPaused)
         {
             Resume();

@@ -52,7 +52,7 @@ public class AttackEffects : MonoBehaviour
 
     private void HandleSpinAttackStart()
     {
-        Debug.Log("旋转攻击特效开始");
+        // Debug.Log("旋转攻击特效开始");
         if(spinAttackVFX != null)
         {
             curVFX = Instantiate(spinAttackVFX, player.transform.position, player.transform.rotation);
@@ -74,7 +74,7 @@ public class AttackEffects : MonoBehaviour
 
     private void HandleDiagonalSlashStart()
     {
-        Debug.Log("斜砍攻击特效开始");
+        // Debug.Log("斜砍攻击特效开始");
         if(diagonalSlashVFX != null)
         {
             // 计算攻击位置和方向
@@ -111,7 +111,7 @@ public class AttackEffects : MonoBehaviour
 
     private void HandleHorizontalSlashStart()
     {
-        Debug.Log("攻击特效开始");
+        // Debug.Log("攻击特效开始");
         if(horizontalSlashVFX != null)
         {
             // 计算攻击的方向和位置
