@@ -1,9 +1,10 @@
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class ChargeEffects : MonoBehaviour
 {
     public Transform player { get; private set; }
-    [SerializeField] private GameObject chargeVFX;  // 充能开始时显示的特效
+    [SerializeField] GameObject chargeVFX;  // 充能开始时显示的特效
     private GameObject curVFX;
 
     private void Awake()
@@ -33,6 +34,7 @@ public class ChargeEffects : MonoBehaviour
             // 生成充能开始时的特效
             curVFX = Instantiate(chargeVFX, this.transform.position, Quaternion.identity);
             curVFX.transform.SetParent(transform);  // 将特效作为当前物体的子物体
+            // GetComponent<AudioSource>().Play();
         }
     }
 

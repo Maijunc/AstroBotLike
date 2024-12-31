@@ -83,6 +83,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5d29a84265e34108b55179cfeaaffb9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1532163965832197545}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5d29a84265e34108b55179cfeaaffb9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1639120873871740040}
   m_SourcePrefab: {fileID: 100100000, guid: d5d29a84265e34108b55179cfeaaffb9, type: 3}
 --- !u!1 &7229159197071467179 stripped
 GameObject:
@@ -247,3 +250,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 1
   scoreChannel: {fileID: 11400000, guid: 8c7e471101d3f4154ad537bab3b1c509, type: 2}
+  pickedEffects: {fileID: -1639120873871740040}
+--- !u!114 &-1639120873871740040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7229159197071467179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a509516589c2e4211adebefad5cc662a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickedVFX: {fileID: 8771972552311404799, guid: bbf9e36a48d6c5648a13889afab076fd, type: 3}
+  pickupSound: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
+  animationDuration: 0.6
+  vfxScaleFactor: 0.6

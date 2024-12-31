@@ -91,9 +91,9 @@ public class PlayerController : ValidatedMonoBehaviour
     CountdownTimer dashTimer;
     CountdownTimer dashCooldownTimer;
 
-    CountdownTimer horizontalSlashCooldownTimer;
-    CountdownTimer diagonalSlashCooldownTimer;
-    CountdownTimer spinAttackCooldownTimer;
+    public CountdownTimer horizontalSlashCooldownTimer;
+    public CountdownTimer diagonalSlashCooldownTimer;
+    public CountdownTimer spinAttackCooldownTimer;
 
     public CountdownTimer chargeTimer;
     CountdownTimer chargeCooldownTimer;
@@ -180,15 +180,15 @@ public class PlayerController : ValidatedMonoBehaviour
     {
         // 进入攻击过程
         // Debug.Log("chargeTimer.Progress = " + chargeTimer.Progress);
-        if (chargeTimer.Progress <= chargeTimeThreshold)
+        if (chargeTimer.Progress <= chargeTimeThreshold && !spinAttackCooldownTimer.IsRunning)
         {
             // Debug.Log("StartspinAttack");
             spinAttackCooldownTimer.Start();
-        } else if(IsMoving)
+        } else if(IsMoving && !diagonalSlashCooldownTimer.IsRunning)
         {   
             // Debug.Log("StartdiagonalSlash");
             diagonalSlashCooldownTimer.Start();
-        } else 
+        } else if(!IsMoving && !horizontalSlashCooldownTimer.IsRunning)
         {
             // Debug.Log("StarthorizontalSlash");
             horizontalSlashCooldownTimer.Start();
@@ -210,6 +210,11 @@ public class PlayerController : ValidatedMonoBehaviour
         var DiagonalSlashState = new DiagonalSlashState(this, animator);
         var SpinAttackState = new SpinAttackState(this, animator);
         var DeathState = new DeathState(this, animator);
+        var JumpChargeState = new JumpChargeState(this, animator);
+
+        var JumpHorizontalSlashState = new JumpHorizontalSlashState(this, animator);
+        var JumpDiagonalSlashState = new JumpDiagonalSlashState(this, animator);
+        var JumpSpinAttackState = new JumpSpinAttackState(this, animator);
 
         // 人物的是否运动的判断来自于状态机
         // Define transitions
@@ -219,6 +224,18 @@ public class PlayerController : ValidatedMonoBehaviour
         // 人物在地面上，且不在跳跃状态，那么就从 JumpState 转换到 LocomotionState 表示落地了
         At(JumpState, LocomotionState, new FuncPredicate(() => groundChecker.isGrounded && !jumpTimer.IsRunning && !dashTimer.IsRunning));
         At(JumpState, LaserJumpState, new FuncPredicate(() => laserTimer.IsRunning));
+
+        // 跳跃蓄力功能
+        At(JumpState, JumpChargeState, new FuncPredicate(() => chargeTimer.IsRunning && !spinAttackCooldownTimer.IsRunning && !diagonalSlashCooldownTimer.IsRunning && !horizontalSlashCooldownTimer.IsRunning));
+        At(JumpChargeState, LocomotionState, new FuncPredicate(() => groundChecker.isGrounded && !jumpTimer.IsRunning && !dashTimer.IsRunning));
+        At(JumpChargeState, JumpHorizontalSlashState, new FuncPredicate(() => horizontalSlashCooldownTimer.IsRunning && chargeTimer.Progress > chargeTimeThreshold && !IsMoving));
+        At(JumpChargeState, JumpDiagonalSlashState, new FuncPredicate(() => diagonalSlashCooldownTimer.IsRunning && chargeTimer.Progress > chargeTimeThreshold && IsMoving));
+        At(JumpChargeState, JumpSpinAttackState, new FuncPredicate(() => spinAttackCooldownTimer.IsRunning && chargeTimer.Progress <= chargeTimeThreshold));
+
+        At(JumpHorizontalSlashState, JumpState, new FuncPredicate(() => !horizontalSlashCooldownTimer.IsRunning));
+        At(JumpDiagonalSlashState, JumpState, new FuncPredicate(() => !diagonalSlashCooldownTimer.IsRunning));
+        At(JumpSpinAttackState, JumpState, new FuncPredicate(() => !spinAttackCooldownTimer.IsRunning));
+
         // 从LaserJumpState 直接转到 LocomotionState
         At(LaserJumpState, LocomotionState, new FuncPredicate(() => !laserTimer.IsRunning && groundChecker.isGrounded));
 
@@ -226,10 +243,11 @@ public class PlayerController : ValidatedMonoBehaviour
         // At(DashState, JumpState, new FuncPredicate(() => !groundChecker.isGrounded && !dashTimer.IsRunning && jumpTimer.IsRunning));
         At(DashState, LocomotionState, new FuncPredicate(() => !dashTimer.IsRunning));
 
-        At(LocomotionState, ChargeState, new FuncPredicate(() => chargeTimer.IsRunning));
-        At(ChargeState, SpinAttackState, new FuncPredicate(() => spinAttackCooldownTimer.IsRunning && chargeTimer.Progress <= chargeTimeThreshold));
-        At(ChargeState, DiagonalSlashState, new FuncPredicate(() => diagonalSlashCooldownTimer.IsRunning && chargeTimer.Progress > chargeTimeThreshold && IsMoving));
+        // 移动蓄力攻击
+        At(LocomotionState, ChargeState, new FuncPredicate(() => chargeTimer.IsRunning && !spinAttackCooldownTimer.IsRunning && !diagonalSlashCooldownTimer.IsRunning && !horizontalSlashCooldownTimer.IsRunning));
         At(ChargeState, HorizontalSlashState, new FuncPredicate(() => horizontalSlashCooldownTimer.IsRunning && chargeTimer.Progress > chargeTimeThreshold && !IsMoving));
+        At(ChargeState, DiagonalSlashState, new FuncPredicate(() => diagonalSlashCooldownTimer.IsRunning && chargeTimer.Progress > chargeTimeThreshold && IsMoving));
+        At(ChargeState, SpinAttackState, new FuncPredicate(() => spinAttackCooldownTimer.IsRunning && chargeTimer.Progress <= chargeTimeThreshold));
 
         // 攻击持续时间结束
         At(HorizontalSlashState, LocomotionState, new FuncPredicate(() => !horizontalSlashCooldownTimer.IsRunning));
@@ -238,6 +256,11 @@ public class PlayerController : ValidatedMonoBehaviour
 
         Any(DeathState, new FuncPredicate(() => deathTimer.IsRunning));
         At(DeathState, LocomotionState, new FuncPredicate(() => !deathTimer.IsRunning));
+
+        At(ChargeState, JumpChargeState, new FuncPredicate(() => jumpTimer.IsRunning));
+        At(HorizontalSlashState, JumpHorizontalSlashState, new FuncPredicate(() => jumpTimer.IsRunning));
+        At(DiagonalSlashState, JumpDiagonalSlashState, new FuncPredicate(() => jumpTimer.IsRunning));
+        At(SpinAttackState, JumpSpinAttackState, new FuncPredicate(() => jumpTimer.IsRunning));
 
         // Set initial state
         stateMachine.SetState(LocomotionState);
@@ -269,7 +292,7 @@ public class PlayerController : ValidatedMonoBehaviour
     void OnAttack(bool performed)
     {
         // 按下攻击键 开始蓄力
-        if(performed && !chargeCooldownTimer.IsRunning && !spinAttackCooldownTimer.IsRunning)
+        if(performed && !chargeCooldownTimer.IsRunning && !spinAttackCooldownTimer.IsRunning && !laserTimer.IsRunning)
         {
             chargeTimer.Start();
         } else if(!performed) //松开攻击键的时候停止计时
@@ -336,7 +359,7 @@ public class PlayerController : ValidatedMonoBehaviour
     }
 
     // 获取斜砍方向（前左斜或前右斜）
-    private Vector3 GetDiagonalSlashDirection()
+    public Vector3 GetDiagonalSlashDirection()
     {
         // 获取角色的右侧和前方方向
         Vector3 forward = transform.forward;
@@ -424,7 +447,7 @@ public class PlayerController : ValidatedMonoBehaviour
     private void OnJump(bool performed)
     {
         // 如果玩家按下跳跃键并且不在跳跃冷却时间内并且在地面上
-        if (performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.isGrounded && (!diagonalSlashCooldownTimer.IsRunning || !horizontalSlashCooldownTimer.IsRunning || !spinAttackCooldownTimer.IsRunning))
+        if (performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.isGrounded)
         {
             jumpTimer.Start();
         }
@@ -472,7 +495,7 @@ public class PlayerController : ValidatedMonoBehaviour
     {
         if (transform.position.y < -10)
         {
-            TakeDamage(100);
+            DeathSequence();
         }
     }
 
