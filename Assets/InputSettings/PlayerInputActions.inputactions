@@ -27,7 +27,7 @@
                     "name": "Fire",
                     "type": "Button",
                     "id": "9177be6e-b418-4c24-ab54-4b6c07579937",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -366,7 +366,7 @@
                     "name": "Submit",
                     "type": "Button",
                     "id": "1a442b12-f4e0-4715-881d-4c46e4f775a1",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -375,7 +375,7 @@
                     "name": "Cancel",
                     "type": "Button",
                     "id": "17036ddf-9e29-4930-88a8-769ccc7b7879",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -439,6 +439,15 @@
                     "type": "PassThrough",
                     "id": "7bbee740-72ff-477f-a817-d8e5cb9be7f7",
                     "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Menu",
+                    "type": "Button",
+                    "id": "8b8557a7-7403-491c-91d0-585e23ec8d6d",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -860,6 +869,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c61755f3-77e7-44a0-8e44-d3e0a03e296c",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

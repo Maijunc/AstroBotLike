@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66ac25473a85640e697796d98fac784f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameOverUI: {fileID: 0}
+  input: {fileID: 11400000, guid: 35aa3e2bb748a443eaca4711fe9e91d3, type: 2}
+  pauseMenuUI: {fileID: 6147774210128474646, guid: 86bca97f556140a40973a5beb801314c, type: 3}
 --- !u!114 &6354766884973479043
 MonoBehaviour:
   m_ObjectHideFlags: 0

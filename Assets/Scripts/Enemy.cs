@@ -65,8 +65,8 @@ public class Enemy : Entity
     public void TakeDamage(float damage)
     {
         GetComponent<Health>().TakeDamage((int)damage);
-        if(GetComponent<Health>().currentHealth <= 0)
-            Die();
+        // if(GetComponent<Health>().currentHealth <= 0)
+        //     Die();
     }
 
     private void Die()

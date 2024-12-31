@@ -1,14 +1,21 @@
+using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : ValidatedMonoBehaviour
 {
+    [Header("References")]
+    [SerializeField, Anywhere] InputReader input;
+    // [SerializeField, Anywhere] GameObject gameOverUI;  // 游戏结束UI
+    [SerializeField, Anywhere] GameObject pauseMenuUI; //游戏暂停菜单UI
+
     public static GameManager Instance; // 单例模式
-    public GameObject gameOverUI;       // 游戏结束UI
     public int score { get; private set; } // 分数
+    
 
     // 游戏是否结束
     private bool isGameOver = false; // 私有字段，外界无法直接访问
+    private bool gameIsPaused = false;
 
     // 只读属性，外界可以读取但无法修改
     public bool IsGameOver
@@ -36,6 +43,50 @@ public class GameManager : MonoBehaviour
     {
         if (isGameOver) return;
         this.score += score;
+    }
+
+    void OnEnable()
+    {
+        input.Menu += OnMenu;
+    }
+
+    void OnDisable()
+    {
+        input.Menu -= OnMenu;
+    }
+
+    private void OnMenu()
+    {
+        if (gameIsPaused)
+        {
+            Resume();
+        }
+        else
+        {
+            Pause();
+        }
+    }
+
+    public void Resume()
+    {
+        pauseMenuUI.SetActive(false);
+        Time.timeScale = 1f;
+        gameIsPaused = false;
+
+    }
+
+    void Pause()
+    {
+        pauseMenuUI.SetActive(true);
+        Time.timeScale = 0f;
+        gameIsPaused = true;
+
+    }
+
+    public void QuitGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("LevelSelection");
     }
 
 }

@@ -324,6 +324,7 @@ public class PlayerController : ValidatedMonoBehaviour
             {
                 Debug.Log($"Hit: {enemy.name}");
                 enemy.GetComponent<Enemy>().TakeDamage((int)horizontalSlashDamage);
+                KnockAway(enemy, 10f);
             }
         }
     }
@@ -354,6 +355,7 @@ public class PlayerController : ValidatedMonoBehaviour
                 Debug.Log($"Hit: {enemy.name}");
                 // 对敌人造成伤害
                 enemy.GetComponent<Enemy>().TakeDamage((int)diagonalSlashDamage);
+                KnockAway(enemy, 10f);
             }
         }
     }
@@ -370,29 +372,45 @@ public class PlayerController : ValidatedMonoBehaviour
     }
     public void HandleSpinAttack() 
     {
+        // 获取攻击位置和攻击方向
+        Vector3 attackPos = transform.position; // 角色位置
+        Vector3 attackDir = transform.forward;  // 攻击方向为角色前方的方向
 
-    // 获取攻击位置和攻击方向
-    Vector3 attackPos = transform.position; // 角色位置
-    Vector3 attackDir = transform.forward;  // 攻击方向为角色前方的方向
+        // 获取所有被攻击的敌人
+        Collider[] hitEnemies = Physics.OverlapSphere(attackPos, spinAttackRange);
 
-    // 获取所有被攻击的敌人
-    Collider[] hitEnemies = Physics.OverlapSphere(attackPos, spinAttackRange);
-
-    // 对每个敌人进行检查
-    foreach (var enemy in hitEnemies)
-    {
-        // 判断敌人是否在攻击范围内
-        Vector3 toEnemy = (enemy.transform.position - transform.position).normalized;
-        float angleToEnemy = Vector3.Angle(attackDir, toEnemy); // 计算敌人与攻击方向的夹角
-
-        // 如果敌人在攻击范围内并且是敌人
-        if (angleToEnemy <= spinAttackConeAngle && enemy.CompareTag("Enemy"))
+        // 对每个敌人进行检查
+        foreach (var enemy in hitEnemies)
         {
-            // 输出日志并对敌人造成伤害
-            Debug.Log($"Hit: {enemy.name}");
-            enemy.GetComponent<Enemy>().TakeDamage((int)spinAttackDamage); // 对敌人造成伤害
+            // 判断敌人是否在攻击范围内
+            Vector3 toEnemy = (enemy.transform.position - transform.position).normalized;
+            float angleToEnemy = Vector3.Angle(attackDir, toEnemy); // 计算敌人与攻击方向的夹角
+
+            // 如果敌人在攻击范围内并且是敌人
+            if (angleToEnemy <= spinAttackConeAngle && enemy.CompareTag("Enemy"))
+            {
+                // 输出日志并对敌人造成伤害
+                Debug.Log($"Hit: {enemy.name}");
+                enemy.GetComponent<Enemy>().TakeDamage((int)spinAttackDamage); // 对敌人造成伤害
+                KnockAway(enemy, 10f);
+            }
         }
     }
+
+    private void KnockAway(Collider enemy, float attackForce)
+    {
+        // 假设怪物有Rigidbody组件
+        Rigidbody enemyRb = enemy.GetComponent<Rigidbody>();
+        if (enemyRb != null)
+        {
+            // 计算击飞方向
+            Vector3 direction = enemy.transform.position - transform.position;
+            direction.y = 10f;  // 仅沿水平方向打飞
+            direction.Normalize();
+
+            // 向怪物应用力
+            enemyRb.AddForce(direction * attackForce, ForceMode.Impulse);
+        }
     }
 
     public void TakeDamage(float damage)

@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Input/InputReader")]
-public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
+public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions, PlayerInputActions.IUIActions
 {
     // 当玩家输入方向键或控制摇杆时，发布 Move 事件，将玩家的移动方向作为参数传递给订阅者。
     public event UnityAction<Vector2> Move = delegate {};
@@ -14,6 +14,7 @@ public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
     public event UnityAction<bool> Jump = delegate {}; 
     public event UnityAction<bool> Dash = delegate {};   
     public event UnityAction<bool> Attack = delegate {};
+    public event UnityAction Menu = delegate {};
     PlayerInputActions inputActions;
 
     public Vector3 Direction => inputActions.Player.Move.ReadValue<Vector2>();
@@ -23,6 +24,7 @@ public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
         {
             inputActions = new PlayerInputActions();
             inputActions.Player.SetCallbacks(this);
+            inputActions.UI.SetCallbacks(this);
         }
     }
 
@@ -93,5 +95,64 @@ public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
                 Dash.Invoke(false);
                 break;
         }
+    }
+
+    public void OnMenu(InputAction.CallbackContext context)
+    {
+        Debug.Log("OnMenu");
+        if (context.phase == InputActionPhase.Started)
+        {
+            Menu.Invoke();
+        }
+    }
+
+    public void OnNavigate(InputAction.CallbackContext context)
+    {
+        // TODO
+    }
+
+    public void OnSubmit(InputAction.CallbackContext context)
+    {
+        // TODO
+    }
+
+    public void OnCancel(InputAction.CallbackContext context)
+    {
+        // TODO
+    }
+
+    public void OnPoint(InputAction.CallbackContext context)
+    {
+        // TODO
+    }
+
+    public void OnClick(InputAction.CallbackContext context)
+    {
+        // TODO
+    }
+
+    public void OnScrollWheel(InputAction.CallbackContext context)
+    {
+        // TODO
+    }
+
+    public void OnMiddleClick(InputAction.CallbackContext context)
+    {
+        // TODO
+    }
+
+    public void OnRightClick(InputAction.CallbackContext context)
+    {
+        // TODO
+    }
+
+    public void OnTrackedDevicePosition(InputAction.CallbackContext context)
+    {
+        // TODO
+    }
+
+    public void OnTrackedDeviceOrientation(InputAction.CallbackContext context)
+    {
+        // TODO
     }
 }
