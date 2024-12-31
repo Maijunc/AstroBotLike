@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using KBCore.Refs;
@@ -64,15 +65,14 @@ public class PlayerController : ValidatedMonoBehaviour
     [SerializeField] float spinAttackDamage = 10f;
     [SerializeField] float spinAttackConeAngle = 360f; //旋转角度
 
+    [Header("Death Settings")]
+    [SerializeField] float deathTime = 2f; //死亡重置时间
+
     // 防止浮动
     const float ZeroF = 0f;
     Transform mainCam;
     bool canUseLaserJump = false;
-    public bool IsMoving
-{
-    get { return movement.magnitude > 0; }
-}
-
+    public bool IsMoving => movement.magnitude > 0;
     float currentSpeed;
     float velocity;
     float jumpVelocity;
@@ -97,6 +97,8 @@ public class PlayerController : ValidatedMonoBehaviour
 
     public CountdownTimer chargeTimer;
     CountdownTimer chargeCooldownTimer;
+
+    CountdownTimer deathTimer;
 
     StateMachine stateMachine;
 
@@ -141,12 +143,13 @@ public class PlayerController : ValidatedMonoBehaviour
         spinAttackCooldownTimer = new CountdownTimer(maxChargeTime);
         diagonalSlashCooldownTimer = new CountdownTimer(diagonalSlashCooldown);
         horizontalSlashCooldownTimer = new CountdownTimer(horizontalSlashCooldown);
+        deathTimer = new CountdownTimer(deathTime);
         
         // Setup charge attack timers
         chargeTimer = new CountdownTimer(maxChargeTime);
         chargeCooldownTimer = new CountdownTimer(chargeCooldown);
 
-        timers = new List<Timer> { jumpTimer, jumpCooldownTimer, laserTimer, laserCooldownTimer, dashTimer, dashCooldownTimer, spinAttackCooldownTimer, diagonalSlashCooldownTimer, horizontalSlashCooldownTimer, chargeTimer, chargeCooldownTimer };
+        timers = new List<Timer> { jumpTimer, jumpCooldownTimer, laserTimer, laserCooldownTimer, dashTimer, dashCooldownTimer, spinAttackCooldownTimer, diagonalSlashCooldownTimer, horizontalSlashCooldownTimer, chargeTimer, chargeCooldownTimer, deathTimer };
 
         // 当完成跳跃的时候，开始冷却
         jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
@@ -166,6 +169,10 @@ public class PlayerController : ValidatedMonoBehaviour
         chargeTimer.OnTimerStop += () => {
             chargeCooldownTimer.Start();
             StartAttackTimer();
+        };
+
+        deathTimer.OnTimerStop += () => {
+            DeathSequence();
         };
     }
 
@@ -202,6 +209,7 @@ public class PlayerController : ValidatedMonoBehaviour
         var HorizontalSlashState = new HorizontalSlashState(this, animator);
         var DiagonalSlashState = new DiagonalSlashState(this, animator);
         var SpinAttackState = new SpinAttackState(this, animator);
+        var DeathState = new DeathState(this, animator);
 
         // 人物的是否运动的判断来自于状态机
         // Define transitions
@@ -227,6 +235,9 @@ public class PlayerController : ValidatedMonoBehaviour
         At(HorizontalSlashState, LocomotionState, new FuncPredicate(() => !horizontalSlashCooldownTimer.IsRunning));
         At(DiagonalSlashState, LocomotionState, new FuncPredicate(() => !diagonalSlashCooldownTimer.IsRunning));
         At(SpinAttackState, LocomotionState, new FuncPredicate(() => !spinAttackCooldownTimer.IsRunning));
+
+        Any(DeathState, new FuncPredicate(() => deathTimer.IsRunning));
+        At(DeathState, LocomotionState, new FuncPredicate(() => !deathTimer.IsRunning));
 
         // Set initial state
         stateMachine.SetState(LocomotionState);
@@ -364,15 +375,25 @@ public class PlayerController : ValidatedMonoBehaviour
     public void TakeDamage(float damage)
     {
         GetComponent<Health>().TakeDamage((int)damage);
-        if(GetComponent<Health>().currentHealth <= 0)
+        if(!deathTimer.IsRunning && GetComponent<Health>().currentHealth <= 0)
             Die();
     }
 
     private void Die()
     {
-        Debug.Log("PlayerDie");
+        rb.linearVelocity = Vector3.zero; // 停止当前的速度
+        rb.angularVelocity = Vector3.zero;     // 停止当前的角速度
+        // 设置为 kinematic，意味着物体不再受物理引擎控制，但仍然能够响应脚本控制
+        rb.isKinematic = true;
+
+        deathTimer.Start();
+    }
+
+    // 死亡后流程
+    private void DeathSequence()
+    {
         this.GetComponent<Health>().ResetHP();
-        rb.linearVelocity = Vector3.zero;
+        
         this.transform.position = spawnPoint.position;
         // 将其重置为初始状态
         this.transform.rotation = Quaternion.identity;
@@ -384,9 +405,11 @@ public class PlayerController : ValidatedMonoBehaviour
             transform.position - freeLookCam.transform.position - Vector3.forward
         );
 
-        // 重置场景
-        ResetScene();
+        // // 重置场景
+        // ResetScene();
 
+        // 重置场景
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     void ResetScene()

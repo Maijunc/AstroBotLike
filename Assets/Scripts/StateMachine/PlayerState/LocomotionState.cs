@@ -20,4 +20,3 @@ public class LocomotionState : BaseState
         player.HandleMovement();
     }
 }
-

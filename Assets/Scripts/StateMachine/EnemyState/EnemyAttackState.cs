@@ -13,7 +13,7 @@ public class EnemyAttackState : EnemyBaseState
 
     public override void OnEnter()
     {
-        Debug.Log("Attack");
+        // Debug.Log("Attack");
         animator.CrossFade(AttackHash, crossFadeDuration);
     }
 

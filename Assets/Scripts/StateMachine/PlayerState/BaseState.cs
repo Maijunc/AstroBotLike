@@ -14,6 +14,7 @@ public abstract class BaseState : IState {
     protected static readonly int HorizontalSlashHash = Animator.StringToHash("HorizontalSlash");
     protected static readonly int DiagonalSlashHash = Animator.StringToHash("DiagonalSlash");
     protected static readonly int ChargeHash = Animator.StringToHash("Charge");
+    protected static readonly int DeathHash = Animator.StringToHash("Death");
 
     // 动画过渡时间
     protected const float crossFadeDuration = 0.1f;
