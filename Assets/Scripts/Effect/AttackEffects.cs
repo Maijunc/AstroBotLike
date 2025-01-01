@@ -59,17 +59,28 @@ public class AttackEffects : MonoBehaviour
             curVFX.transform.SetParent(transform);  // 将特效作为当前物体的子物体，确保特效随角色移动
         }
 
-        // 播放旋转攻击的音效
+        // 播放旋转攻击的音效，设置为循环播放，并调节播放速度（倍速）
         if(spinAttackSound != null)
-            GetComponent<AudioSource>().PlayOneShot(spinAttackSound);
+        {
+            AudioSource audioSource = GetComponent<AudioSource>();
+            audioSource.clip = spinAttackSound;
+            audioSource.loop = true;  // 设置音效循环播放
+            audioSource.pitch = 1.5f;  // 设置音效的播放倍速（例如：1.5x速度）
+            audioSource.Play();  // 开始播放
+        }
     }
     private void HandleSpinAttackStop()
     {
         if (curVFX != null)
         {
             Destroy(curVFX);
-            GetComponent<AudioSource>().Stop();
         }
+
+        // 停止音效的循环播放
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.pitch = 1f; // 恢复音效的正常播放速度
+        audioSource.loop = false;  // 关闭循环播放
+        audioSource.Stop();  // 停止播放音效
     }
 
     private void HandleDiagonalSlashStart()

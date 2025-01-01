@@ -8,6 +8,7 @@ public class JumpState : BaseState
     {
         // Debug.Log("JumpState OnEnter");
         animator.CrossFade(JumpHash, crossFadeDuration);
+        animator.CrossFadeInFixedTime(IdleHash, 0.1f, layer: 1); // 播放上半身攻击动画
     }
 
     public override void FixedUpdate()

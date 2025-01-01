@@ -70,7 +70,7 @@ public class PlayerController : ValidatedMonoBehaviour
     [SerializeField] float deathTime = 2f; //死亡重置时间
 
 
-    [SerializeField] float KnockForce = 40f; //怪物死亡的冲击力
+    [SerializeField] float KnockForce = 20f; //怪物死亡的冲击力
 
     // 防止浮动
     const float ZeroF = 0f;

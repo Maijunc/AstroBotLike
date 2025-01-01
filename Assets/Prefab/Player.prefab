@@ -2812,6 +2812,7 @@ MonoBehaviour:
   spinAttackDamage: 10
   spinAttackConeAngle: 360
   deathTime: 2
+  KnockForce: 12
 --- !u!136 &9211747442943780963
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3128,7 +3129,7 @@ MonoBehaviour:
   diagonalSlashVFX: {fileID: 8525990746615576120, guid: b85d21f3b8fed714bacf0c4fd50fa512, type: 3}
   diagonalSlashSound: {fileID: 8300000, guid: d46323e22e74e46baa241cbf48c85671, type: 3}
   spinAttackVFX: {fileID: 6510164885591752455, guid: 708210818e5264c4fa4f993c9f351428, type: 3}
-  spinAttackSound: {fileID: 0}
+  spinAttackSound: {fileID: 8300000, guid: f37b5b55bd957422aa0028481b41ec39, type: 3}
 --- !u!1001 &5025532193534768503
 PrefabInstance:
   m_ObjectHideFlags: 0
