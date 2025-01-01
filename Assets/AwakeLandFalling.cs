@@ -10,6 +10,7 @@ public class AwakeLandFalling : MonoBehaviour
     public float[] waitTimes; // 每个物体的等待时间
 
     private bool ifTriggered = false;
+    private bool ifFinished = false;
 
     void OnTriggerEnter(Collider other)
     {
@@ -17,10 +18,17 @@ public class AwakeLandFalling : MonoBehaviour
         if (other.CompareTag("Player")&& !ifTriggered)
         {
             Debug.Log("角色穿越了物体触发器!");
+            ifTriggered = true;
+        }
+    }
+
+    private void Update()
+    {
+        if (transform.childCount == 0&& !ifFinished)
+        {
             // 在这里执行你的脚本逻辑，例如生成物体、播放动画等
             StartSink();
-
-            ifTriggered = true;
+            ifFinished = true;
         }
     }
 

@@ -1,4 +1,4 @@
-﻿using DG.Tweening;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -51,16 +51,38 @@ public class LandGenerator : MonoBehaviour
                 //每个陆地的延迟时间可以根据行列顺序来计算
                 float nowDelayTime = (row * landColCount + col) * delayTime;
 
-                DG.Tweening.DOTween.SetTweensCapacity(tweenersCapacity: 200, sequencesCapacity: 200);
-                // 使用DOTween让每个陆地从下往上升起，并控制每个陆地动画的延迟
-                DOVirtual.DelayedCall(nowDelayTime, () =>
-                {
-                    // 在延迟后执行陆地动画
-                    land.SetActive(true);  // 在动画开始前激活物体
-                    land.transform.DOMoveY(land.transform.position.y + riseHeight, riseDuration)
-                        .SetEase(Ease.OutBounce);  // 使用缓动效果
-                });
+                StartCoroutine(AnimateLand(land, nowDelayTime));
+
             }
+        }
+
+        // 协程来处理每个陆地的动画
+        IEnumerator AnimateLand(GameObject land, float delayTime)
+        {
+            // 延迟一段时间
+            yield return new WaitForSeconds(delayTime);
+
+            // 激活陆地
+            land.SetActive(true);
+
+            // 记录陆地的初始位置
+            Vector3 startPos = land.transform.position;
+
+            // 计算动画开始和结束的时间
+            float startTime = Time.time;
+            float endTime = startTime + riseDuration;
+
+            // 进行动画：通过改变位置实现从下往上的移动
+            while (Time.time < endTime)
+            {
+                float t = (Time.time - startTime) / riseDuration;  // 计算当前时间的进度
+                float yPos = Mathf.Lerp(startPos.y, startPos.y + riseHeight, t);  // 通过线性插值计算Y轴位置
+                land.transform.position = new Vector3(startPos.x, yPos, startPos.z);
+                yield return null;  // 等待下一帧
+            }
+
+            // 确保最终位置是正确的
+            land.transform.position = new Vector3(startPos.x, startPos.y + riseHeight, startPos.z);
         }
     }
 }

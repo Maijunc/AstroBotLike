@@ -1,25 +1,30 @@
-using DG.Tweening;
+ï»¿using DG.Tweening;
 using UnityEngine;
 using System.Collections;
 
 public class CreateDestination : MonoBehaviour
 {
-    public GameObject destinationObject;//Ä¿µÄµØÎïÌå
-    public float[] destinationPositions;//Ä¿µÄµØÉú³ÉµÄ×ø±ê
-    public float destinationMoveSpeed = 0f;//Ä¿µÄµØÒÆ¶¯µÄËÙ¶È
-    public float destinationMoveHeight = 0f;//Ä¿µÄµØÒÆ¶¯µÄ¸ß¶È
-    public float destinationWaitTime;//Ä¿µÄµØµÈ´ı¶àÉÙÊ±¼äºóÉú³É
+    public GameObject destinationObject;//ç›®çš„åœ°ç‰©ä½“
+    public float[] destinationPositions;//ç›®çš„åœ°ç”Ÿæˆçš„åæ ‡
+    public float destinationMoveSpeed = 0f;//ç›®çš„åœ°ç§»åŠ¨çš„é€Ÿåº¦
+    public float destinationMoveHeight = 0f;//ç›®çš„åœ°ç§»åŠ¨çš„é«˜åº¦
+    public float destinationWaitTime;//ç›®çš„åœ°ç­‰å¾…å¤šå°‘æ—¶é—´åç”Ÿæˆ
 
 
     private bool ifTriggered = false;
 
+    void OnDestroy()
+    {
+        DOTween.KillAll();
+    }
+
     void OnTriggerEnter(Collider other)
     {
-        // È·±£´¥·¢ÎïÌåÊÇ½ÇÉ«
+        // ç¡®ä¿è§¦å‘ç‰©ä½“æ˜¯è§’è‰²
         if (other.CompareTag("Player") && !ifTriggered)
         {
-            Debug.Log("½ÇÉ«´©Ô½ÁËÎïÌå´¥·¢Æ÷!");
-            // ÔÚÕâÀïÖ´ĞĞÄãµÄ½Å±¾Âß¼­£¬ÀıÈçÉú³ÉÎïÌå¡¢²¥·Å¶¯»­µÈ
+            Debug.Log("è§’è‰²ç©¿è¶Šäº†ç‰©ä½“è§¦å‘å™¨!");
+            // åœ¨è¿™é‡Œæ‰§è¡Œä½ çš„è„šæœ¬é€»è¾‘ï¼Œä¾‹å¦‚ç”Ÿæˆç‰©ä½“ã€æ’­æ”¾åŠ¨ç”»ç­‰
             StartCreate();
 
             ifTriggered = true;
@@ -33,18 +38,18 @@ public class CreateDestination : MonoBehaviour
 
     IEnumerator CreateDestnationObject()
     {
-        // µÈ´ıÖ¸¶¨Ê±¼ä
+        // ç­‰å¾…æŒ‡å®šæ—¶é—´
         yield return new WaitForSeconds(destinationWaitTime);
 
-        // ¼ÆËãÄ¿µÄµØµÄ×ø±ê
+        // è®¡ç®—ç›®çš„åœ°çš„åæ ‡
         Vector3 startPosition = new Vector3(destinationPositions[0], destinationPositions[1], destinationPositions[2]);
         Vector3 targetPosition = new Vector3(destinationPositions[0], destinationPositions[1] + destinationMoveHeight, destinationPositions[2]);
 
-        // Éú³ÉÎïÌå
+        // ç”Ÿæˆç‰©ä½“
         GameObject destination = Instantiate(destinationObject, startPosition, Quaternion.identity);
 
-        // Ê¹ÓÃ DoTween Ê¹ÎïÌåÑØ Y ÖáÆ½»¬ÒÆ¶¯µ½Ä¿±êÎ»ÖÃ
+        // ä½¿ç”¨ DoTween ä½¿ç‰©ä½“æ²¿ Y è½´å¹³æ»‘ç§»åŠ¨åˆ°ç›®æ ‡ä½ç½®
         destination.transform.DOMoveY(targetPosition.y, destinationMoveHeight / destinationMoveSpeed)
-            .SetEase(Ease.Linear); // Ê¹ÓÃÏßĞÔÔÈËÙµÄÒÆ¶¯·½Ê½
+            .SetEase(Ease.Linear); // ä½¿ç”¨çº¿æ€§åŒ€é€Ÿçš„ç§»åŠ¨æ–¹å¼
     }
 }
