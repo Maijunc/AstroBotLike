@@ -8,8 +8,11 @@ public class JumpDiagonalSlashState : BaseState
 
     public override void OnEnter() 
     {
+        // 获取当前层的动画状态信息
+        AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(1); // layer 1 代表你设置的动画层
         // Debug.Log("Enter Jump DiagonalSlashState");
-        animator.CrossFadeInFixedTime(DiagonalSlashHash, 0.1f, layer: 1);
+        if (!currentState.IsName("DiagonalSlash")) 
+            animator.CrossFadeInFixedTime(DiagonalSlashHash, 0.1f, layer: 1);
     }
 
     public override void FixedUpdate()

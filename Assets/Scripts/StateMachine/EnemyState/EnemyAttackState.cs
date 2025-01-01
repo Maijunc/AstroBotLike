@@ -13,6 +13,7 @@ public class EnemyAttackState : EnemyBaseState
 
     public override void OnEnter()
     {
+        enemy.canAttack = true;
         // Debug.Log("Attack");
         animator.CrossFade(AttackHash, crossFadeDuration);
     }
@@ -20,6 +21,8 @@ public class EnemyAttackState : EnemyBaseState
     public override void Update()
     {
         agent.SetDestination(player.position);
-        enemy.Attack();
+
+        if (enemy.canAttack)
+            enemy.Attack();
     }
 }

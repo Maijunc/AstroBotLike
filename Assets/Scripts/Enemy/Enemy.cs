@@ -19,7 +19,7 @@ public class Enemy : Entity
     [SerializeField] float animationDuration = 2f;
 
     [SerializeField] protected float wanderRadius = 5f;
-    [SerializeField] float timeBetweenAttacks = 1f;
+    [SerializeField] float timeBetweenAttacks = 0.4f;
 
     [SerializeField] float deathAnimationDuration = 2f;
 
@@ -32,13 +32,14 @@ public class Enemy : Entity
 
     static readonly int deathProgress = Animator.StringToHash("deathProgress");
 
+    public bool canAttack;
+
     void OnValidate() => this.ValidateRefs();
 
     protected virtual void Awake()
     {
         attackTimer = new CountdownTimer(timeBetweenAttacks);
         deathTimer = new CountdownTimer(deathAnimationDuration);
-
 
         deathTimer.OnTimerStop += () => {
             DeathSequence();
@@ -96,6 +97,8 @@ public class Enemy : Entity
     public void Attack()
     {
         if (attackTimer.IsRunning) return;
+        canAttack = false;
+        Debug.Log("Attack");
 
         attackTimer.Start();
         playerDetector.Player.GetComponent<PlayerController>().TakeDamage(1);

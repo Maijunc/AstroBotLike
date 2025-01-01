@@ -112,6 +112,7 @@ public class PlayerController : ValidatedMonoBehaviour
 
     bool canHorizontalSlash = false;
     bool canDiagonalSlash = false;
+    public bool isDied { get; private set; }
 
     void Awake()
     {
@@ -193,7 +194,7 @@ public class PlayerController : ValidatedMonoBehaviour
 
     void StartAttackTimer()
     {
-        if (deathTimer.IsRunning) return;
+        if (deathTimer.IsRunning || laserTimer.IsRunning || (!laserTimer.IsRunning && !canUseLaserJump && !groundChecker.isGrounded)) return;
         // 进入攻击过程
         // Debug.Log("chargeTimer.Progress = " + chargeTimer.Progress);
         if (chargeTimer.Progress <= chargeTimeThreshold && !spinAttackCooldownTimer.IsRunning)
@@ -271,7 +272,7 @@ public class PlayerController : ValidatedMonoBehaviour
         At(SpinAttackState, LocomotionState, new FuncPredicate(() => !spinAttackCooldownTimer.IsRunning));
 
         Any(DeathState, new FuncPredicate(() => deathTimer.IsRunning));
-        At(DeathState, LocomotionState, new FuncPredicate(() => !deathTimer.IsRunning));
+        At(DeathState, LocomotionState, new FuncPredicate(() => !deathTimer.IsRunning && !isDied));
 
         At(ChargeState, JumpChargeState, new FuncPredicate(() => jumpTimer.IsRunning));
         At(HorizontalSlashState, JumpHorizontalSlashState, new FuncPredicate(() => jumpTimer.IsRunning));
@@ -438,25 +439,25 @@ public class PlayerController : ValidatedMonoBehaviour
     // 死亡后流程
     private void DeathSequence()
     {
-        this.GetComponent<Health>().ResetHP();
+        // this.GetComponent<Health>().ResetHP();
 
-        this.transform.position = spawnPoint.position;
-        // 将其重置为初始状态
-        this.transform.rotation = Quaternion.identity;
+        // this.transform.position = spawnPoint.position;
+        // // 将其重置为初始状态
+        // this.transform.rotation = Quaternion.identity;
 
         // 重置摄像头位置
-        freeLookCam.OnTargetObjectWarped(
-            transform,
-            // 修正相对位置
-            transform.position - freeLookCam.transform.position - Vector3.forward
-        );
+        // freeLookCam.OnTargetObjectWarped(
+        //     transform,
+        //     // 修正相对位置
+        //     transform.position - freeLookCam.transform.position - Vector3.forward
+        // );
 
 
         // // 重置场景
         // ResetScene();
 
         // 重置场景
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     void ResetScene()
@@ -494,12 +495,23 @@ public class PlayerController : ValidatedMonoBehaviour
     {
         if (performed && !dashTimer.IsRunning && !dashCooldownTimer.IsRunning)
         {
+            StopAttack();
             dashTimer.Start();
         }
         else if (!performed && dashTimer.IsRunning)
         {
             dashTimer.Stop();
         }
+    }
+
+    private void StopAttack()
+    {
+        if(horizontalSlashCooldownTimer.IsRunning)
+            horizontalSlashCooldownTimer.Stop();
+        if(diagonalSlashCooldownTimer.IsRunning)
+            diagonalSlashCooldownTimer.Stop();
+        if(spinAttackCooldownTimer.IsRunning)
+            spinAttackCooldownTimer.Stop();
     }
 
     void Update()
@@ -615,6 +627,8 @@ public class PlayerController : ValidatedMonoBehaviour
 
     public void HandleMovement()
     {
+        if(rb.isKinematic) return;
+
         // 调整输入方向相对于摄像机的方向
         var adjustedDirection = Quaternion.AngleAxis(mainCam.eulerAngles.y, Vector3.up) * movement;
 
