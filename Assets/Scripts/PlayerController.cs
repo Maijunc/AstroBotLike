@@ -68,8 +68,6 @@ public class PlayerController : ValidatedMonoBehaviour
 
     [Header("Death Settings")]
     [SerializeField] float deathTime = 2f; //死亡重置时间
-
-
     [SerializeField] float KnockForce = 20f; //怪物死亡的冲击力
 
     // 防止浮动
@@ -110,6 +108,10 @@ public class PlayerController : ValidatedMonoBehaviour
     static readonly int speed = Animator.StringToHash("speed");
     static readonly int yVelocity = Animator.StringToHash("yVelocity");
     static readonly int spinProgress = Animator.StringToHash("spinProgress");
+    static readonly int deathProgress = Animator.StringToHash("deathProgress");
+
+    bool canHorizontalSlash = false;
+    bool canDiagonalSlash = false;
 
     void Awake()
     {
@@ -178,10 +180,19 @@ public class PlayerController : ValidatedMonoBehaviour
         deathTimer.OnTimerStop += () => {
             DeathSequence();
         };
+
+        horizontalSlashCooldownTimer.OnTimerStart += () => {
+            canHorizontalSlash = true;
+        };
+
+        diagonalSlashCooldownTimer.OnTimerStart += () => {
+            canDiagonalSlash = true;
+        };
     }
 
     void StartAttackTimer()
     {
+        if (deathTimer.IsRunning) return;
         // 进入攻击过程
         // Debug.Log("chargeTimer.Progress = " + chargeTimer.Progress);
         if (chargeTimer.Progress <= chargeTimeThreshold && !spinAttackCooldownTimer.IsRunning)
@@ -308,6 +319,10 @@ public class PlayerController : ValidatedMonoBehaviour
     // 横劈
     public void HandleHorizontalSlash() 
     { 
+        if(!canHorizontalSlash) return;
+
+        canHorizontalSlash = false;
+
         // 攻击位置和方向
         Vector3 attackPos = transform.position + transform.forward;
         Vector3 attackDir = transform.forward;
@@ -334,6 +349,9 @@ public class PlayerController : ValidatedMonoBehaviour
     }
     public void HandleDiagonalSlash() 
     {
+        if(!canDiagonalSlash) return;
+        canDiagonalSlash = false;
+
         // 计算攻击位置和方向
         Vector3 attackPos = transform.position + transform.forward; // 攻击起始位置
         Vector3 attackDir = transform.forward; // 默认斜砍的攻击方向是角色的朝前方向
@@ -359,7 +377,7 @@ public class PlayerController : ValidatedMonoBehaviour
                 Debug.Log($"Hit: {enemy.name}");
                 // 对敌人造成伤害
                 enemy.GetComponent<Enemy>().TakeDamage((int)diagonalSlashDamage);
-                enemy.GetComponent<Enemy>().KnockAway(5f); // 击飞敌人
+                enemy.GetComponent<Enemy>().KnockAway(KnockForce); // 击飞敌人
             }
         }
     }
@@ -396,7 +414,7 @@ public class PlayerController : ValidatedMonoBehaviour
                 // 输出日志并对敌人造成伤害
                 Debug.Log($"Hit: {enemy.name}");
                 enemy.GetComponent<Enemy>().TakeDamage((int)spinAttackDamage); // 对敌人造成伤害
-                enemy.GetComponent<Enemy>().KnockAway(5f); // 击飞敌人
+                enemy.GetComponent<Enemy>().KnockAway(KnockForce); // 击飞敌人
             }
         }
     }
@@ -592,6 +610,7 @@ public class PlayerController : ValidatedMonoBehaviour
         animator.SetFloat(speed, currentSpeed);
         animator.SetFloat(yVelocity, rb.linearVelocity.y);
         animator.SetFloat(spinProgress, 1 - spinAttackCooldownTimer.Progress);
+        animator.SetFloat(deathProgress, 1 - deathTimer.Progress);
     }
 
     public void HandleMovement()

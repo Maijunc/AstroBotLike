@@ -34,12 +34,8 @@ public class Enemy : Entity
         attackTimer = new CountdownTimer(timeBetweenAttacks);
         deathTimer = new CountdownTimer(deathAnimationDuration);
 
-        deathTimer.OnTimerStart += () => {
-            Debug.Log("DeathTimer Start");
-        };
 
         deathTimer.OnTimerStop += () => {
-            Debug.Log("DeathTimer Stop");
             DeathSequence();
         };
 
@@ -102,11 +98,15 @@ public class Enemy : Entity
     {
         GetComponent<Health>().TakeDamage((int)damage);
         if(GetComponent<Health>().currentHealth <= 0)
+        {
             Die();
+        }
     }
 
     public void KnockAway(float attackForce)
     {
+        if(GetComponent<Health>().currentHealth > 0) return;
+
         // 获取Rigidbody组件
         Rigidbody enemyRb = GetComponent<Rigidbody>();
         if (enemyRb != null)

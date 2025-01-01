@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8845592268584792564}
   - component: {fileID: 8438526342990532375}
   - component: {fileID: 1861598935962830593}
+  - component: {fileID: 7426984935214670358}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -95,8 +96,11 @@ MonoBehaviour:
   agent: {fileID: -506612469425146049}
   playerDetector: {fileID: 8438526342990532375}
   animator: {fileID: 2017160323824369451}
+  deathVFXPrefab: {fileID: 0}
+  animationDuration: 2
   wanderRadius: 5
   timeBetweenAttacks: 0
+  deathAnimationDuration: 2
 --- !u!114 &8438526342990532375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,6 +133,33 @@ MonoBehaviour:
   maxHealth: 1
   playerHealthChannel: {fileID: 0}
   currentHealth: 0
+--- !u!54 &7426984935214670358
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006590498731807608}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &1922270397977049973
 PrefabInstance:
   m_ObjectHideFlags: 0
