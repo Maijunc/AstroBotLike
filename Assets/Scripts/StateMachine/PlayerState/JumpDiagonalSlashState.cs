@@ -8,7 +8,7 @@ public class JumpDiagonalSlashState : BaseState
 
     public override void OnEnter() 
     {
-        Debug.Log("Enter Jump DiagonalSlashState");
+        // Debug.Log("Enter Jump DiagonalSlashState");
         animator.CrossFadeInFixedTime(DiagonalSlashHash, 0.1f, layer: 1);
     }
 

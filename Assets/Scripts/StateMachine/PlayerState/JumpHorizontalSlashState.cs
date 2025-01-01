@@ -8,7 +8,7 @@ public class JumpHorizontalSlashState : BaseState
 
     public override void OnEnter() 
     {
-        Debug.Log("Enter Jump HorizontalSlashState");
+        // Debug.Log("Enter Jump HorizontalSlashState");
         animator.CrossFadeInFixedTime(HorizontalSlashHash, 0.1f, layer: 1);
     }
 

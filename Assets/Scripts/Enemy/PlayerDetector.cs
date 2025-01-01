@@ -24,7 +24,6 @@ public class PlayerDetector : MonoBehaviour
     void Start()
     {
         detectionTimer = new CountdownTimer(detectionCooldown);
-        Player = GameObject.FindGameObjectWithTag("Player").transform; // Make sure to tag the player object with "Player"
         detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
     }
 
@@ -59,5 +58,15 @@ public class PlayerDetector : MonoBehaviour
         // Draw lines to represent the cone
         Gizmos.DrawLine(transform.position, transform.position + forwardConeDirection);
         Gizmos.DrawLine(transform.position, transform.position + backwardConeDirection);
+    }
+
+    public void GetPlayer()
+    {
+        Player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
+
+    public bool RedetectPlayer()
+    {
+        return detectionStrategy.Execute(Player, transform, detectionTimer);
     }
 }

@@ -4,18 +4,21 @@ using KBCore.Refs;
 using System;
 using static Timer;
 using System.Collections.Generic;
+
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(PlayerDetector))]
 public class Enemy : Entity
 {
-    [SerializeField, Self] NavMeshAgent agent;
-    [SerializeField, Self] PlayerDetector playerDetector;
-    [SerializeField, Child] Animator animator;
+    [SerializeField, Self] protected NavMeshAgent agent;
+    [SerializeField, Self] protected PlayerDetector playerDetector;
+    [SerializeField, Child] protected Animator animator;
 
     // 特效
     // [SerializeField] GameObject spawnVFXPrefab;
     [SerializeField] GameObject deathVFXPrefab; // 死亡特效预制体
     [SerializeField] float animationDuration = 2f;
 
-    [SerializeField] float wanderRadius = 5f;
+    [SerializeField] protected float wanderRadius = 5f;
     [SerializeField] float timeBetweenAttacks = 1f;
 
     [SerializeField] float deathAnimationDuration = 2f;
@@ -23,13 +26,15 @@ public class Enemy : Entity
     StateMachine stateMachine;
 
     CountdownTimer attackTimer;
-    CountdownTimer deathTimer;
+    protected CountdownTimer deathTimer;
 
-    List<Timer> timers;
+    protected List<Timer> timers;
+
+    static readonly int deathProgress = Animator.StringToHash("deathProgress");
 
     void OnValidate() => this.ValidateRefs();
 
-    void Awake()
+    protected virtual void Awake()
     {
         attackTimer = new CountdownTimer(timeBetweenAttacks);
         deathTimer = new CountdownTimer(deathAnimationDuration);
@@ -54,28 +59,30 @@ public class Enemy : Entity
         At(attackState, chaseState, new FuncPredicate(() => !playerDetector.CanAttackPlayer()));
 
         Any(dieState, new FuncPredicate(() => deathTimer.IsRunning));
-        // At(dieState, wanderState, new FuncPredicate(() => !deathTimer.IsRunning));
 
         stateMachine.SetState(wanderState);
     }
 
-    void Start()
-    {
-        
-    }
+    protected void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
+    protected void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
 
-    void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
-    void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
-
-    void Update()
+    protected virtual void Update()
     {
+        FallDetect();
         stateMachine.Update();
         HandleTimers();
+
+        UpdateAnimator();
     }
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         stateMachine.FixedUpdate();
+    }
+
+    private void UpdateAnimator()
+    {
+        animator.SetFloat(deathProgress, 1 - deathTimer.Progress);
     }
 
     private void HandleTimers()
@@ -94,7 +101,7 @@ public class Enemy : Entity
         playerDetector.Player.GetComponent<PlayerController>().TakeDamage(1);
     }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         GetComponent<Health>().TakeDamage((int)damage);
         if(GetComponent<Health>().currentHealth <= 0)
@@ -156,5 +163,14 @@ public class Enemy : Entity
         // Debug.Log("Destroy");
         // 销毁怪物对象
         Destroy(gameObject);
+    }
+
+    // 检测玩家是否掉入虚空
+    private void FallDetect()
+    {
+        if (transform.position.y < -10)
+        {
+            DeathSequence();
+        }
     }
 }

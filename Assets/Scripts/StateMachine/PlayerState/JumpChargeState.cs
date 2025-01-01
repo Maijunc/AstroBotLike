@@ -8,7 +8,7 @@ public class JumpChargeState : BaseState
 
     public override void OnEnter()
     {
-        Debug.Log("Enter JumpChargeState");
+        // Debug.Log("Enter JumpChargeState");
         animator.CrossFadeInFixedTime(ChargeHash, 0.1f, layer: 1);
     }
 

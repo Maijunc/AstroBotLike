@@ -16,7 +16,7 @@ public class PlayerController : ValidatedMonoBehaviour
     [SerializeField, Anywhere] InputReader input;
     [SerializeField, Anywhere] GroundChecker groundChecker;
     [SerializeField, Anywhere] Collider playerCollider;
-    [SerializeField, Anywhere] Transform spawnPoint;
+    [SerializeField, Anywhere] public Transform spawnPoint;
 
     [Header("Settings")]
     [SerializeField] float moveSpeed = 6f;
@@ -511,11 +511,11 @@ public class PlayerController : ValidatedMonoBehaviour
 
         UpdateAnimator();
 
-        DropDetect();
+        FallDetect();
     }
 
     // 检测玩家是否掉入虚空
-    private void DropDetect()
+    private void FallDetect()
     {
         if (transform.position.y < -10)
         {
