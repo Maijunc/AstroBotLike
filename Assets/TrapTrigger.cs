@@ -2,19 +2,17 @@ using UnityEngine;
 
 public class TrapTrigger : MonoBehaviour
 {
-
-    public float x;
-    public float y;
-    public float z;
     void OnTriggerEnter(Collider other)
     {
 
-        if (other.gameObject.tag == "Trap")
+        if (other.gameObject.tag == "Player")
         {
             Debug.Log(other.gameObject.tag);
-            //GetComponent<CharacterController>().enabled = false;
-            transform.position = new Vector3(x, y, z);
-            //GetComponent<CharacterController>().enabled = true;
+            PlayerController player = other.gameObject.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                player.TakeDamage(200);
+            }
         }
     }
 }

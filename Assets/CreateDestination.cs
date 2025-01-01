@@ -13,6 +13,14 @@ public class CreateDestination : MonoBehaviour
 
     private bool ifTriggered = false;
 
+    private void Update()
+    {
+        if (transform.childCount == 0 && ifTriggered)
+        {
+            StartCreate();
+        }
+    }
+
     void OnDestroy()
     {
         DOTween.KillAll();
@@ -24,8 +32,6 @@ public class CreateDestination : MonoBehaviour
         if (other.CompareTag("Player") && !ifTriggered)
         {
             Debug.Log("角色穿越了物体触发器!");
-            // 在这里执行你的脚本逻辑，例如生成物体、播放动画等
-            StartCreate();
 
             ifTriggered = true;
         }

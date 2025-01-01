@@ -178,6 +178,7 @@ public class PlayerController : ValidatedMonoBehaviour
         };
 
         deathTimer.OnTimerStop += () => {
+            rb.isKinematic = false;
             DeathSequence();
         };
 
@@ -224,7 +225,7 @@ public class PlayerController : ValidatedMonoBehaviour
         var HorizontalSlashState = new HorizontalSlashState(this, animator);
         var DiagonalSlashState = new DiagonalSlashState(this, animator);
         var SpinAttackState = new SpinAttackState(this, animator);
-        var DeathState = new DeathState(this, animator);
+        var DeathState = new DeathState(this, animator, rb);
         var JumpChargeState = new JumpChargeState(this, animator);
 
         var JumpHorizontalSlashState = new JumpHorizontalSlashState(this, animator);
@@ -430,8 +431,6 @@ public class PlayerController : ValidatedMonoBehaviour
     {
         rb.linearVelocity = Vector3.zero; // 停止当前的速度
         rb.angularVelocity = Vector3.zero;     // 停止当前的角速度
-        // 设置为 kinematic，意味着物体不再受物理引擎控制，但仍然能够响应脚本控制
-        rb.isKinematic = true;
 
         deathTimer.Start();
     }
@@ -440,7 +439,7 @@ public class PlayerController : ValidatedMonoBehaviour
     private void DeathSequence()
     {
         this.GetComponent<Health>().ResetHP();
-        
+
         this.transform.position = spawnPoint.position;
         // 将其重置为初始状态
         this.transform.rotation = Quaternion.identity;
@@ -452,11 +451,12 @@ public class PlayerController : ValidatedMonoBehaviour
             transform.position - freeLookCam.transform.position - Vector3.forward
         );
 
+
         // // 重置场景
         // ResetScene();
 
         // 重置场景
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     void ResetScene()
