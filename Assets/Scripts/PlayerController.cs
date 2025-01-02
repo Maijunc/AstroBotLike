@@ -104,6 +104,8 @@ public class PlayerController : ValidatedMonoBehaviour
 
     CountdownTimer deathTimer;
 
+    CountdownTimer victoryTimer;
+
     StateMachine stateMachine;
 
     // Animator parameters
@@ -159,6 +161,8 @@ public class PlayerController : ValidatedMonoBehaviour
         // Setup charge attack timers
         chargeTimer = new CountdownTimer(maxChargeTime);
         chargeCooldownTimer = new CountdownTimer(chargeCooldown);
+
+        victoryTimer = new CountdownTimer(2f);
 
         timers = new List<Timer> { jumpTimer, jumpCooldownTimer, laserTimer, laserCooldownTimer, dashTimer, dashCooldownTimer, spinAttackCooldownTimer, diagonalSlashCooldownTimer, horizontalSlashCooldownTimer, chargeTimer, chargeCooldownTimer, deathTimer };
 
@@ -253,6 +257,8 @@ public class PlayerController : ValidatedMonoBehaviour
         var JumpDiagonalSlashState = new JumpDiagonalSlashState(this, animator);
         var JumpSpinAttackState = new JumpSpinAttackState(this, animator);
 
+        var VictoryState = new VictoryState(this, animator);
+
         // 人物的是否运动的判断来自于状态机
         // Define transitions
         // 如果 jumpTimer 还在运行，那么就从 LocomotionState 转换到 JumpState 人物正在跳跃
@@ -298,6 +304,8 @@ public class PlayerController : ValidatedMonoBehaviour
         At(HorizontalSlashState, JumpHorizontalSlashState, new FuncPredicate(() => jumpTimer.IsRunning));
         At(DiagonalSlashState, JumpDiagonalSlashState, new FuncPredicate(() => jumpTimer.IsRunning));
         At(SpinAttackState, JumpSpinAttackState, new FuncPredicate(() => jumpTimer.IsRunning));
+
+        Any(VictoryState, new FuncPredicate(() => victoryTimer.IsRunning));
 
         // Set initial state
         stateMachine.SetState(LocomotionState);
@@ -700,5 +708,10 @@ public class PlayerController : ValidatedMonoBehaviour
     void SmoothSpeed(float value)
     {
         currentSpeed = Mathf.SmoothDamp(currentSpeed, value, ref velocity, smoothTime);
+    }
+
+    public void Victory()
+    {
+        victoryTimer.Start();
     }
 }

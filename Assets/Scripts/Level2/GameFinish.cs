@@ -17,6 +17,7 @@ public class GameFinish : MonoBehaviour
         {
             Debug.Log("角色穿越了物体触发器!");
             if (ifBackToMenu){
+                other.GetComponent<PlayerController>().Victory();
                 StartCoroutine(LoadScene("LevelSelection"));
             }
             else {
@@ -32,10 +33,12 @@ public class GameFinish : MonoBehaviour
 
     IEnumerator LoadScene(string sceneName)
     {
+        yield return new WaitForSeconds(1.5f);
+
         animator.SetBool("FadeIn", true);
         animator.SetBool("FadeOut", false);
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1f);
 
         AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
     }
