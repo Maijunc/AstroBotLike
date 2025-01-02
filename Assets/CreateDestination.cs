@@ -12,12 +12,14 @@ public class CreateDestination : MonoBehaviour
 
 
     private bool ifTriggered = false;
+    private bool ifFinish = false;
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (transform.childCount == 0 && ifTriggered)
+        if (transform.childCount == 0 && ifTriggered && !ifFinish)
         {
             StartCreate();
+            ifFinish = true;
         }
     }
 

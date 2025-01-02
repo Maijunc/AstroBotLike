@@ -42,12 +42,5 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
-        async.completed += OnLoadScene;
-    }
-
-    private void OnLoadScene(AsyncOperation operation)
-    {
-        animator.SetBool("FadeIn", false);
-        animator.SetBool("FadeOut", true);
     }
 }

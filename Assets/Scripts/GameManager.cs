@@ -1,6 +1,7 @@
 using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : ValidatedMonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GameManager : ValidatedMonoBehaviour
     [SerializeField, Anywhere] GameObject pauseMenuUI; //游戏暂停菜单UI
 
     public static GameManager Instance; // 单例模式
+    public Animator animator;
     public int score { get; private set; } // 分数
     
 
@@ -89,7 +91,23 @@ public class GameManager : ValidatedMonoBehaviour
     public void QuitGame()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("LevelSelection");
+        StartCoroutine(LoadScene("LevelSelection"));
     }
 
+    IEnumerator LoadScene(string sceneName)
+    {
+        animator.SetBool("FadeIn", true);
+        animator.SetBool("FadeOut", false);
+
+        yield return new WaitForSeconds(1);
+
+        AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
+        async.completed += OnLoadScene;
+    }
+
+    private void OnLoadScene(AsyncOperation operation)
+    {
+        animator.SetBool("FadeIn", false);
+        animator.SetBool("FadeOut", true);
+    }
 }
