@@ -2792,9 +2792,10 @@ MonoBehaviour:
   maxChargeTime: 2
   chargeCooldown: 0
   chargeTimeThreshold: 0.5
-  spinAttackRange: 1.8
+  spinAttackRange: 1.95
   spinAttackDamage: 10
   spinAttackConeAngle: 360
+  spinAttackDamageCooldown: 0.5
   deathTime: 2
   KnockForce: 12
 --- !u!136 &9211747442943780963

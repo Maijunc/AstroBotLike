@@ -19,9 +19,10 @@ public class PartyMonster : Entity, IEnemy
     [SerializeField] GameObject deathVFXPrefab; // 死亡特效预制体
 
     [Header("Slide Settings")]
-    [SerializeField] float slashRange = 3.2f;
+    [SerializeField] float slideRange = 3.2f;
     [SerializeField] float slideDuration = 1.5f;
     [SerializeField] float slideCooldown = 10f;
+    [SerializeField] float slideSpeed = 0.5f;
 
     [Header("Audio")]
     [SerializeField] AudioClip knockAwaySound;
@@ -87,14 +88,14 @@ public class PartyMonster : Entity, IEnemy
         var attackState = new PartyMonsterAttackState(this, animator, agent, playerDetector.Player);
         var dieState = new PartyMonsterDieState(this, animator);
         var getHitState = new PartyMonsterGetHitState(this, animator, agent);
-        var slideState = new PartyMonsterSlideState(this, animator, agent, playerDetector.Player, playerDetector, attackRange, slashRange);
+        var slideState = new PartyMonsterSlideState(this, animator, agent, playerDetector.Player, playerDetector, attackRange, slideRange, slideSpeed);
 
         At(idleState, chaseState, new FuncPredicate(() => playerDetector.CanDetectPlayer()));
         At(chaseState, idleState, new FuncPredicate(() => !playerDetector.CanDetectPlayer()));
         At(chaseState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer(attackRange)));
         At(attackState, chaseState, new FuncPredicate(() => !playerDetector.CanAttackPlayer(attackRange)));
 
-        At(chaseState, slideState, new FuncPredicate(() => playerDetector.CanAttackPlayer(slashRange) && !slideCooldownTimer.IsRunning));
+        At(chaseState, slideState, new FuncPredicate(() => playerDetector.CanAttackPlayer(slideRange) && !slideCooldownTimer.IsRunning));
         At(slideState, chaseState, new FuncPredicate(() => !slideTimer.IsRunning));
 
         Any(getHitState, new FuncPredicate(() => !deathTimer.IsRunning && getHitTimer.IsRunning && !slideTimer.IsRunning));

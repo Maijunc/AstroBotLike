@@ -6,7 +6,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Default
+  m_Name: Default2
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: deathProgress
@@ -41,7 +41,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Dizzy
+  m_Name: IdleNormal
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -197,7 +197,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Attack02
+  m_Name: SD 0
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -275,7 +275,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Push
+  m_Name: Attack01
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -327,7 +327,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: IdleNormal
+  m_Name: IdleNormal2
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -431,7 +431,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle03
+  m_Name: Dizzy2 0
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -483,7 +483,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Attack01
+  m_Name: Attack02
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -539,10 +539,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1102791408949158890}
-    m_Position: {x: 300, y: 144, z: 0}
+    m_Position: {x: 300, y: 140, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102825168595174514}
-    m_Position: {x: 552, y: 24, z: 0}
+    m_Position: {x: 550, y: 20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102539365866939724}
     m_Position: {x: 550, y: 80, z: 0}

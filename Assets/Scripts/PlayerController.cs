@@ -216,6 +216,22 @@ public class PlayerController : ValidatedMonoBehaviour
         }
     }
 
+    void StopAttackTimer()
+    {
+        if (spinAttackCooldownTimer.IsRunning)
+        {
+            spinAttackCooldownTimer.Stop();
+        }
+        if (diagonalSlashCooldownTimer.IsRunning)
+        {
+            diagonalSlashCooldownTimer.Stop();
+        }
+        if (horizontalSlashCooldownTimer.IsRunning)
+        {
+            horizontalSlashCooldownTimer.Stop();
+        }
+    }
+
     private void SetupStateMachine()
     {
         // State Machine
@@ -363,7 +379,7 @@ public class PlayerController : ValidatedMonoBehaviour
         Vector3 attackDir = transform.forward; // 默认斜砍的攻击方向是角色的朝前方向
 
         // 斜砍范围和角度设定
-        float coneAngle = 45f; // 锥形范围的角度，假设是45度的斜砍范围
+        float coneAngle = 90f; // 锥形范围的角度，假设是45度的斜砍范围
 
         // 获取斜砍的方向（这里可以根据角色当前朝向来判断方向是前左斜还是前右斜）
         Vector3 slashDirection = GetDiagonalSlashDirection();
@@ -449,6 +465,7 @@ public class PlayerController : ValidatedMonoBehaviour
     {
         rb.linearVelocity = Vector3.zero; // 停止当前的速度
         rb.angularVelocity = Vector3.zero;     // 停止当前的角速度
+        StopAttackTimer();
 
         deathTimer.Start();
     }

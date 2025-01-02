@@ -7,13 +7,15 @@ public class PartyMonsterSlideState : PartyMonsterBaseState
     readonly PlayerDetector playerDetector;
     readonly float initialAttackRange;
     readonly float maxAttackRange;
-    public PartyMonsterSlideState(PartyMonster enemy, Animator animator, UnityEngine.AI.NavMeshAgent agent, Transform player, PlayerDetector playerDetector, float initialAttackRange, float maxAttackRange) : base(enemy, animator)
+    readonly float slideSpeed;
+    public PartyMonsterSlideState(PartyMonster enemy, Animator animator, UnityEngine.AI.NavMeshAgent agent, Transform player, PlayerDetector playerDetector, float initialAttackRange, float maxAttackRange, float slideSpeed) : base(enemy, animator)
     {
         this.agent = agent;
         this.player = player;
         this.playerDetector = playerDetector;
         this.initialAttackRange = initialAttackRange;
         this.maxAttackRange = maxAttackRange;
+        this.slideSpeed = slideSpeed;
     }
 
     public override void OnEnter()
@@ -24,7 +26,7 @@ public class PartyMonsterSlideState : PartyMonsterBaseState
         // agent.isStopped = true;
         enemy.slideTimer.Start();
 
-        agent.speed += 1;
+        agent.speed += slideSpeed;
     }
 
     public override void Update()
@@ -43,6 +45,6 @@ public class PartyMonsterSlideState : PartyMonsterBaseState
     public override void OnExit()
     {
         // agent.isStopped = false;
-        agent.speed -= 1;
+        agent.speed -= slideSpeed;
     }
 }
