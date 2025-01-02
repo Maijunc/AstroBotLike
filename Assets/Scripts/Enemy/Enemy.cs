@@ -7,11 +7,14 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(PlayerDetector))]
-public class Enemy : Entity
+[RequireComponent(typeof(AudioSource))]
+public class Enemy : Entity, IEnemy
 {
     [SerializeField, Self] protected NavMeshAgent agent;
     [SerializeField, Self] protected PlayerDetector playerDetector;
     [SerializeField, Child] protected Animator animator;
+    [SerializeField, Child] protected AudioSource audioSource;
+    [SerializeField] AudioClip knockAwaySound;
 
     // 特效
     // [SerializeField] GameObject spawnVFXPrefab;
@@ -38,6 +41,12 @@ public class Enemy : Entity
 
     protected virtual void Awake()
     {
+        if(playerDetector.Player == null)
+        {
+            // Debug.Log("Player Transform is null in Enemy.");
+            playerDetector.GetPlayer();
+        }
+
         attackTimer = new CountdownTimer(timeBetweenAttacks);
         deathTimer = new CountdownTimer(deathAnimationDuration);
 
@@ -116,11 +125,18 @@ public class Enemy : Entity
     public void KnockAway(float attackForce)
     {
         if(GetComponent<Health>().currentHealth > 0) return;
+        if(knockAwaySound != null)
+            audioSource.PlayOneShot(knockAwaySound);
 
         // 获取Rigidbody组件
         Rigidbody enemyRb = GetComponent<Rigidbody>();
         if (enemyRb != null)
         {
+            // 禁用碰撞组件
+            Collider collider = GetComponent<Collider>();
+            if(collider != null)
+                collider.enabled = false;
+
             // 禁用NavMeshAgent
             NavMeshAgent navAgent = GetComponent<NavMeshAgent>();
             if (navAgent != null)

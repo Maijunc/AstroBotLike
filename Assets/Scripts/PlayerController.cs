@@ -65,6 +65,8 @@ public class PlayerController : ValidatedMonoBehaviour
     [SerializeField] float spinAttackRange = 2f;
     [SerializeField] float spinAttackDamage = 10f;
     [SerializeField] float spinAttackConeAngle = 360f; //旋转角度
+    [SerializeField] float spinAttackDamageCooldown = 0.5f; // 每段伤害间隔
+
 
     [Header("Death Settings")]
     [SerializeField] float deathTime = 2f; //死亡重置时间
@@ -113,6 +115,8 @@ public class PlayerController : ValidatedMonoBehaviour
     bool canHorizontalSlash = false;
     bool canDiagonalSlash = false;
     public bool isDied { get; private set; }
+
+    private Dictionary<GameObject, float> hitCooldowns = new Dictionary<GameObject, float>();
 
     void Awake()
     {
@@ -344,8 +348,8 @@ public class PlayerController : ValidatedMonoBehaviour
             if (angleToEnemy <= coneAngle && enemy.CompareTag("Enemy"))
             {
                 Debug.Log($"Hit: {enemy.name}");
-                enemy.GetComponent<Enemy>().TakeDamage((int)horizontalSlashDamage);
-                enemy.GetComponent<Enemy>().KnockAway(KnockForce); // 击飞敌人
+                enemy.GetComponent<IEnemy>().TakeDamage((int)horizontalSlashDamage);
+                enemy.GetComponent<IEnemy>().KnockAway(KnockForce); // 击飞敌人
             }
         }
     }
@@ -378,8 +382,8 @@ public class PlayerController : ValidatedMonoBehaviour
             {
                 Debug.Log($"Hit: {enemy.name}");
                 // 对敌人造成伤害
-                enemy.GetComponent<Enemy>().TakeDamage((int)diagonalSlashDamage);
-                enemy.GetComponent<Enemy>().KnockAway(KnockForce); // 击飞敌人
+                enemy.GetComponent<IEnemy>().TakeDamage((int)diagonalSlashDamage);
+                enemy.GetComponent<IEnemy>().KnockAway(KnockForce); // 击飞敌人
             }
         }
     }
@@ -406,6 +410,19 @@ public class PlayerController : ValidatedMonoBehaviour
         // 对每个敌人进行检查
         foreach (var enemy in hitEnemies)
         {
+            // 获取敌人组件并确保安全调用
+            GameObject enemyObj = enemy.gameObject;
+            IEnemy iEnemy = enemyObj.GetComponent<IEnemy>();
+            if (iEnemy == null) continue;
+            // 检查敌人是否在冷却中
+            if (hitCooldowns.TryGetValue(enemyObj, out float lastHitTime))
+            {
+                if (Time.time - lastHitTime < spinAttackDamageCooldown) continue; // 冷却未结束，跳过处理
+            }
+
+            // 记录当前时间为最新的受击时间
+            hitCooldowns[enemyObj] = Time.time;
+
             // 判断敌人是否在攻击范围内
             Vector3 toEnemy = (enemy.transform.position - transform.position).normalized;
             float angleToEnemy = Vector3.Angle(attackDir, toEnemy); // 计算敌人与攻击方向的夹角
@@ -415,8 +432,8 @@ public class PlayerController : ValidatedMonoBehaviour
             {
                 // 输出日志并对敌人造成伤害
                 Debug.Log($"Hit: {enemy.name}");
-                enemy.GetComponent<Enemy>().TakeDamage((int)spinAttackDamage); // 对敌人造成伤害
-                enemy.GetComponent<Enemy>().KnockAway(KnockForce); // 击飞敌人
+                enemy.GetComponent<IEnemy>().TakeDamage((int)spinAttackDamage); // 对敌人造成伤害
+                enemy.GetComponent<IEnemy>().KnockAway(KnockForce); // 击飞敌人
             }
         }
     }
