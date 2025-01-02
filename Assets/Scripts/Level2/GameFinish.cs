@@ -21,7 +21,8 @@ public class GameFinish : MonoBehaviour
                 StartCoroutine(LoadScene("LevelSelection"));
             }
             else {
-                if(nextScene==null)
+                other.GetComponent<PlayerController>().Victory();
+                if (nextScene==null)
                     StartCoroutine(LoadScene("LevelSelection"));
                 else
                     StartCoroutine(LoadScene(nextScene));

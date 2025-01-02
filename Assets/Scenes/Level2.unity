@@ -26849,15 +26849,15 @@ PrefabInstance:
       objectReference: {fileID: 1584130793}
     - target: {fileID: 7389158630123075575, guid: c058395446b8c464ba8fe6069667943c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 94.95
+      value: 70.27
       objectReference: {fileID: 0}
     - target: {fileID: 7389158630123075575, guid: c058395446b8c464ba8fe6069667943c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.94
+      value: 2.95
       objectReference: {fileID: 0}
     - target: {fileID: 7389158630123075575, guid: c058395446b8c464ba8fe6069667943c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.34
+      value: -103.69
       objectReference: {fileID: 0}
     - target: {fileID: 7389158630123075575, guid: c058395446b8c464ba8fe6069667943c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -42493,6 +42493,70 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1234280680}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1187854800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1187854801}
+  - component: {fileID: 1187854802}
+  m_Layer: 0
+  m_Name: Party Monster NavMesh Surface
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1187854801
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187854800}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 78.48034, y: -6.56394, z: 1.7791393}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1187854802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187854800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: 1479372276
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.5
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 343d96e92dc6edf44ba6f6a35ccecbc9, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!43 &1188835841
 Mesh:
   m_ObjectHideFlags: 0
@@ -50086,6 +50150,10 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 0.41
       objectReference: {fileID: 0}
+    - target: {fileID: 6677240450908195262, guid: a2bb05c8fdfbebf4d99b41f78545173f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7322331299475574852, guid: a2bb05c8fdfbebf4d99b41f78545173f, type: 3}
       propertyPath: m_LocalScale.x
       value: 2
@@ -50141,6 +50209,10 @@ PrefabInstance:
     - target: {fileID: 9166360709015410567, guid: a2bb05c8fdfbebf4d99b41f78545173f, type: 3}
       propertyPath: m_Name
       value: FinishedBlock
+      objectReference: {fileID: 0}
+    - target: {fileID: 9166360709015410567, guid: a2bb05c8fdfbebf4d99b41f78545173f, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -53170,3 +53242,4 @@ SceneRoots:
   - {fileID: 1797423544}
   - {fileID: 1032418319}
   - {fileID: 254661789}
+  - {fileID: 1187854801}
