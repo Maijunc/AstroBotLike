@@ -7,7 +7,6 @@ public class PlayerDetector : MonoBehaviour
     [SerializeField] float detectionRadius = 10f; //Large circle around enemy
     [SerializeField] float innerDetectionRadius = 5f; //Small circle around enemy
     [SerializeField] float detectionCooldown = 1f; //Cooldown between detections
-    [SerializeField] float attackRange = 1.2f; // Range at which the enemy can attack the player
 
     public Transform Player { get; private set; }
     public Health playerHealth { get; private set; }
@@ -35,7 +34,7 @@ public class PlayerDetector : MonoBehaviour
         return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
     }
 
-    public bool CanAttackPlayer()
+    public bool CanAttackPlayer(float attackRange)
     {
         var directionToPlayer = Player.position - transform.position;
         return directionToPlayer.magnitude <= attackRange;

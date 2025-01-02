@@ -60,9 +60,9 @@ public class Turtle : Enemy
         Any(defendState, new FuncPredicate(() => !deathTimer.IsRunning && defendTimer.IsRunning && playerDetector.CanDetectPlayer()));
         At(defendState, dashState, new FuncPredicate(() => !defendTimer.IsRunning && dashTimer.IsRunning));
 
-        At(dashState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer()));
-        At(dashState, chaseState, new FuncPredicate(() => !dashTimer.IsRunning && !playerDetector.CanAttackPlayer() && playerDetector.CanDetectPlayer()));
-        At(dashState, wanderState, new FuncPredicate(() => !dashTimer.IsRunning && !playerDetector.CanAttackPlayer() && !playerDetector.CanDetectPlayer()));
+        At(dashState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer(attackRange)));
+        At(dashState, chaseState, new FuncPredicate(() => !dashTimer.IsRunning && !playerDetector.CanAttackPlayer(attackRange) && playerDetector.CanDetectPlayer()));
+        At(dashState, wanderState, new FuncPredicate(() => !dashTimer.IsRunning && !playerDetector.CanAttackPlayer(attackRange) && !playerDetector.CanDetectPlayer()));
         defendCooldownTimer.Start();
     }
 

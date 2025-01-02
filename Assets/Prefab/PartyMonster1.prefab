@@ -77,7 +77,6 @@ MonoBehaviour:
   detectionRadius: 10
   innerDetectionRadius: 5
   detectionCooldown: 1
-  attackRange: 2.2
 --- !u!114 &6411711929823168697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,13 +233,18 @@ MonoBehaviour:
   animator: {fileID: 6839677331504615322}
   audioSource: {fileID: 5512212145103400395}
   rb: {fileID: 5150933571038002963}
-  knockAwaySound: {fileID: 0}
   deathVFXPrefab: {fileID: 0}
+  slashRange: 2.6
+  slideDuration: 1
+  slideCooldown: 10
+  knockAwaySound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: 73243066ba2da462c8c9f73070f86eee, type: 3}
   animationDuration: 2
   wanderRadius: 5
   timeBetweenAttacks: 0.4
   deathAnimationDuration: 2
   getHitCooldown: 0.2
+  attackRange: 2
   canAttack: 0
 --- !u!65 &5783970660653637126
 BoxCollider:

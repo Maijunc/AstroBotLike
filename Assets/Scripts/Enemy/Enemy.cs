@@ -25,6 +25,7 @@ public class Enemy : Entity, IEnemy
     [SerializeField] float timeBetweenAttacks = 0.4f;
 
     [SerializeField] float deathAnimationDuration = 2f;
+    [SerializeField] protected float attackRange = 1.2f;
 
     StateMachine stateMachine;
 
@@ -65,8 +66,8 @@ public class Enemy : Entity, IEnemy
 
         At(wanderState, chaseState, new FuncPredicate(() => playerDetector.CanDetectPlayer()));
         At(chaseState, wanderState, new FuncPredicate(() => !playerDetector.CanDetectPlayer()));
-        At(chaseState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer()));
-        At(attackState, chaseState, new FuncPredicate(() => !playerDetector.CanAttackPlayer()));
+        At(chaseState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer(attackRange)));
+        At(attackState, chaseState, new FuncPredicate(() => !playerDetector.CanAttackPlayer(attackRange)));
 
         Any(dieState, new FuncPredicate(() => deathTimer.IsRunning));
 
