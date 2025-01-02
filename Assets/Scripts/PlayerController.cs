@@ -209,11 +209,11 @@ public class PlayerController : ValidatedMonoBehaviour
         {
             // Debug.Log("StartspinAttack");
             spinAttackCooldownTimer.Start();
-        } else if(IsMoving && !diagonalSlashCooldownTimer.IsRunning)
+        } else if(IsMoving && !diagonalSlashCooldownTimer.IsRunning && !horizontalSlashCooldownTimer.IsRunning)
         {   
             // Debug.Log("StartdiagonalSlash");
             diagonalSlashCooldownTimer.Start();
-        } else if(!IsMoving && !horizontalSlashCooldownTimer.IsRunning)
+        } else if(!IsMoving && !horizontalSlashCooldownTimer.IsRunning && !diagonalSlashCooldownTimer.IsRunning)
         {
             // Debug.Log("StarthorizontalSlash");
             horizontalSlashCooldownTimer.Start();
